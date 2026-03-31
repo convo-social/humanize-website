@@ -9403,11 +9403,10 @@ img {
   z-index: 10;
   flex-flow: wrap;
   justify-content: center;
-  align-items: flex-start;
-  padding-top: 2rem;
+  align-items: center;
   display: flex;
   position: absolute;
-  inset: 0% 0% 3rem 0%;
+  inset: 0%;
 }
 
 .logo {
