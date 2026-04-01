@@ -2768,8 +2768,8 @@
           <div class="left-cta-c w-col w-col-6 w-col-stack">
             <div class="content-cta-c">
               <div class="headline-cta-c">
-                <h2 class="no-margins black">Ready to learn what your consumers<em> actually</em> say about you?</h2>
-                <div class="body-strong">Tell us what you&#x27;re trying to learn. We&#x27;ll show you how Convo gets you there in days, not months.</div>
+                <h2 class="no-margins black">Let&#x27;s get you closer to your consumers</h2>
+                <div class="body-strong">Tell us a bit about yourself and what you&#x27;re exploring. We&#x27;ll set up a quick call to show you how Convo can help.</div>
               </div>
               <div class="wrap-cta-logos transparenr">
                 <div class="master-marquee">
@@ -2793,23 +2793,20 @@
           </div>
           <div class="right-cta-c w-col w-col-6 w-col-stack">
             <div class="form-block-cta-c w-form">
-              <form id="email-form" name="email-form" data-name="Email Form" method="get" class="form-cta-c" data-wf-page-id="6993b104d651e8e87100b7d7" data-wf-element-id="04ef9d40-fcad-5b09-85c6-64e1d7ec23e7">
+              <form id="demo-form" name="demo-form" data-name="Demo Form" class="form-cta-c" data-wf-page-id="6993b104d651e8e87100b7d7" data-wf-element-id="04ef9d40-fcad-5b09-85c6-64e1d7ec23e7">
                 <div class="input-wrap">
-                  <div class="label-large text-input-label">Name</div><input class="text-field w-input" maxlength="256" name="name" data-name="Name" placeholder="Full Name" type="text" id="name" required="">
+                  <div class="label-large text-input-label">Name</div><input class="text-field w-input" maxlength="256" name="name" data-name="Name" placeholder="Your name" type="text" id="name" required="">
                 </div>
                 <div class="input-wrap">
-                  <div class="label-large text-input-label">email</div><input class="text-field w-input" maxlength="256" name="email" data-name="email" placeholder="Company Email" type="email" id="email" required="">
+                  <div class="label-large text-input-label">Email</div><input class="text-field w-input" maxlength="256" name="email" data-name="Email" placeholder="you@company.com" type="email" id="email" required="">
                 </div>
                 <div class="input-wrap">
-                  <div class="label-large text-input-label">phone number</div><input class="text-field w-input" maxlength="256" name="name" data-name="name" placeholder="Phone Number" type="tel" id="phone">
-                </div>
-                <div class="input-wrap">
-                  <div class="label-large text-input-label">message</div><textarea placeholder="Tell us about your company" maxlength="5000" id="message" name="message" data-name="message" class="text-field textarea-cta w-input"></textarea>
+                  <div class="label-large text-input-label">What are you looking to learn? <span style="opacity:0.5">(optional)</span></div><textarea placeholder="E.g. We want to understand how Gen Z perceives our new packaging..." maxlength="5000" id="research-needs" name="research_needs" data-name="Research Needs" class="text-field textarea-cta w-input"></textarea>
                 </div>
                 <div class="submit-wrap"><input type="submit" data-wait="Please wait..." class="submit-absolute w-button" value="Submit">
-                  <a href="#" button="" data-wf--cta-main--variant="primary" class="cta-main w-inline-block">
+                  <a href="#" button="" data-wf--cta-main--variant="primary" class="cta-main w-inline-block" id="demo-submit-btn">
                     <div class="button-text-mask">
-                      <div button-text="" class="button-text">Send message</div>
+                      <div button-text="" class="button-text">Book a Demo</div>
                     </div>
                     <div class="button-icon-wrap right">
                       <div button-icon-right="" class="icon-button w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewbox="0 0 16 16" fill="none">
@@ -2824,10 +2821,10 @@
                 </div>
               </form>
               <div class="success-message w-form-done">
-                <div>Thank you! Your submission has been received!</div>
+                <div>Thanks! Opening Calendly so you can pick a time&hellip;</div>
               </div>
               <div class="error-message w-form-fail">
-                <div>Oops! Something went wrong while submitting the form.</div>
+                <div>Oops! Something went wrong. Please try again.</div>
               </div>
             </div>
           </div>
@@ -3077,25 +3074,42 @@ function raf(time) {
 requestAnimationFrame(raf);
 </script>
   <script>
-document.addEventListener('DOMContentLoaded', function() {
-  var phoneInput = document.getElementById('phone');
-    if (phoneInput) {
-        phoneInput.setAttribute('maxlength', '14');
-            phoneInput.addEventListener('input', function(e) {
-                  var x = e.target.value.replace(/\D/g, '').substring(0, 10);
-                        var a = x.substring(0, 3);
-                              var b = x.substring(3, 6);
-                                    var c = x.substring(6, 10);
-                                          if (x.length > 6) {
-                                                  e.target.value = '(' + a + ') ' + b + '-' + c;
-                                                        } else if (x.length > 3) {
-                                                                e.target.value = '(' + a + ') ' + b;
-                                                                      } else if (x.length > 0) {
-                                                                              e.target.value = '(' + a;
-                                                                                    }
-                                                                                        });
-                                                                                          }
-                                                                                          });
-                                                                                          </script>
+(function() {
+  var form = document.getElementById('demo-form');
+  if (!form) return;
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    var name = form.querySelector('#name').value.trim();
+    var email = form.querySelector('#email').value.trim();
+    var researchNeeds = form.querySelector('#research-needs').value.trim();
+
+    // Fire Segment event
+    if (window.analytics) {
+      analytics.track('Lead Submitted', {
+        name: name,
+        email: email,
+        research_needs: researchNeeds
+      });
+    }
+
+    // Show success state
+    form.style.display = 'none';
+    var done = form.parentElement.querySelector('.w-form-done');
+    if (done) done.style.display = 'block';
+
+    // Build Calendly URL with prefilled name + email
+    var calendlyUrl = 'https://calendly.com/useconvo/book';
+    var params = [];
+    if (name) params.push('name=' + encodeURIComponent(name));
+    if (email) params.push('email=' + encodeURIComponent(email));
+    if (params.length) calendlyUrl += '?' + params.join('&');
+
+    // Open Calendly in new tab
+    window.open(calendlyUrl, '_blank');
+  });
+})();
+</script>
 </body>
 </html>
