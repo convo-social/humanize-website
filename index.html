@@ -1,0 +1,4913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Humanize — AI-Moderated Qualitative Research</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Serif:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ─── DESIGN TOKENS ─── */
+    :root {
+      --color-page: #FFFEFE;
+      --color-beige: #F6F2ED;
+      --color-dark: #0F0F0E;
+      --color-dark-surf: #1A1A18;
+      --color-accent: #2C5F8A;
+      --color-muted: #7A7A75;
+      --color-mid: #3D3D3A;
+      --color-border: rgba(0,0,0,0.09);
+      --color-border-dk: rgba(255,255,255,0.08);
+      --color-divider: #E8E4DF;
+      --accent-slate: #2C5F8A;
+      --accent-sage: #3D6B5E;
+      --accent-violet: #5C4A8A;
+      --accent-brown: #8A5C3A;
+      --coral: #C47A4A;
+      --accent-teal: #2A6B6B;
+      --radius-card: 6px;
+      --radius-tag: 4px;
+      --radius-pill: 999px;
+      --radius-input: 4px;
+
+      /* Hero (humanize) tokens */
+      --h-bg: #FAFAF8;
+      --h-bg-tint: #F5F4F0;
+      --h-ink: #0E0E0C;
+      --h-ink-2: #1A1A18;
+      --h-gray-1: #6B6B66;
+      --h-gray-2: #9A9A94;
+      --h-gray-3: #C8C8C2;
+      --h-gray-4: #E5E4DE;
+      --h-gray-5: #EFEEE8;
+      --h-line: #E8E7E1;
+      --h-white: #FFFFFF;
+      --h-green: #16A34A;
+      --h-font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+      --h-font-mono: 'IBM Plex Mono', monospace;
+      --hw-card-bg: #F1EFE8;
+      --hw-beige: #E8E2D4;
+      --hw-beige-dark: #DDD5C3;
+      --pl-ink: #1A1A18;
+      --pl-ink-2: #4A4A47;
+      --pl-ink-3: #8A8A85;
+      --pl-green: #4A7C59;
+      --pl-beige: #C9BFA8;
+      --pl-line: rgba(26, 26, 24, 0.08);
+
+      /* ─── DESIGN SYSTEM ─── */
+      --text-hero: 44px;
+      --text-hero-lh: 1.05;
+      --text-hero-tracking: -0.02em;
+
+      --text-section: 40px;
+      --text-section-lh: 1.1;
+      --text-section-tracking: -0.02em;
+
+      --text-card: 22px;
+      --text-card-lh: 1.3;
+      --text-card-tracking: -0.01em;
+
+      --text-body: 16px;
+      --text-body-lh: 1.55;
+
+      --text-meta: 13px;
+      --text-meta-lh: 1.4;
+      --text-meta-tracking: 0.08em;
+
+      --section-pad-y: 120px;
+      --eyebrow-to-h2: 16px;
+      --h2-to-sub: 24px;
+      --sub-to-content: 64px;
+      --ds-card-gap: 24px;
+      --ds-card-pad: 32px;
+      --ds-card-bg: #F4F2EC;
+      --ds-card-radius: 20px;
+      --eyebrow-color: #6B6B6B;
+    }
+
+    /* ─── RESET ─── */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* ─── GLOBAL ─── */
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: var(--h-bg);
+      color: var(--color-dark);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    img { max-width: 100%; display: block; }
+
+    section {
+      padding: var(--section-pad-y) 0;
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    /* ─── TYPOGRAPHY ─── */
+    .eyebrow,
+    .h-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: var(--text-meta);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: var(--text-meta-tracking);
+      color: var(--eyebrow-color);
+      margin-bottom: var(--eyebrow-to-h2);
+    }
+
+    h1 {
+      font-size: var(--text-hero);
+      line-height: var(--text-hero-lh);
+      letter-spacing: var(--text-hero-tracking);
+      font-weight: 500;
+      color: var(--h-ink);
+    }
+
+    h2 {
+      font-size: var(--text-section);
+      line-height: var(--text-section-lh);
+      letter-spacing: var(--text-section-tracking);
+      font-weight: 500;
+      color: var(--h-ink);
+    }
+
+    h3 {
+      font-weight: 500;
+    }
+
+    .subhead {
+      font-size: var(--text-body);
+      font-weight: 400;
+      line-height: var(--text-body-lh);
+      color: var(--h-gray-1);
+      max-width: 100%;
+      margin-top: var(--h2-to-sub);
+    }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--h-font-sans);
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--h-ink);
+      color: var(--h-white);
+      border-color: var(--h-ink);
+    }
+
+    .btn-primary:hover {
+      background: #1a1a18;
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--h-ink);
+      border-color: var(--h-line);
+    }
+
+    .btn-ghost:hover {
+      background: var(--h-white);
+      border-color: var(--h-ink);
+    }
+
+    .btn svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-primary:hover svg {
+      transform: translateX(2px);
+    }
+
+    .btn-sm {
+      font-size: 0.75rem;
+      padding: 0.5rem 1rem;
+    }
+
+    /* ─── INSIGHT CARD ─── */
+    .insight-card {
+      background: var(--color-beige);
+      border-left: 3px solid var(--color-dark);
+      border-radius: 0 var(--radius-card) var(--radius-card) 0;
+      padding: 16px 20px;
+    }
+    .insight-card .quote {
+      font-size: 14px;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.65;
+      color: var(--color-dark);
+      margin-bottom: 8px;
+    }
+    .insight-card .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #999;
+    }
+
+    /* ─── SECTION DIVIDERS ─── */
+    .section-divider {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+    .section-divider::before {
+      content: '';
+      display: block;
+      height: 1px;
+      background: var(--h-line);
+    }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 720px) {
+      :root {
+        --text-hero: 36px;
+        --text-section: 30px;
+        --text-card: 20px;
+        --section-pad-y: 72px;
+        --sub-to-content: 40px;
+      }
+      section {
+        padding: var(--section-pad-y) 0;
+      }
+      .container {
+        padding: 0 24px;
+      }
+      .sec-logos {
+        padding: 24px 0;
+      }
+      .section-divider {
+        padding: 0 24px;
+      }
+    }
+
+    /* ─── NAV ─── */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--h-bg);
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+    }
+    .site-nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-wordmark {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--color-dark);
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--h-ink);
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: border-color 0.15s;
+    }
+    .nav-links a:hover {
+      border-color: var(--hw-beige);
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-actions .btn-sm {
+      font-size: 0.75rem;
+      padding: 0.3rem 1rem;
+    }
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 20px;
+      height: 14px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .nav-toggle span,
+    .nav-toggle::before,
+    .nav-toggle::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 1.5px;
+      background: var(--color-dark);
+      transition: transform 0.2s;
+    }
+    .nav-toggle::before { top: 0; }
+    .nav-toggle span { top: 6px; }
+    .nav-toggle::after { top: 12px; }
+    .nav-mobile {
+      display: none;
+    }
+    .nav-mobile.is-open {
+      display: block;
+      position: absolute;
+      top: 64px;
+      left: 0;
+      right: 0;
+      background: var(--h-bg);
+      border-bottom: 1px solid var(--color-divider);
+      padding: 24px;
+      z-index: 99;
+    }
+    .nav-mobile a {
+      display: block;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-muted);
+      padding: 10px 0;
+      transition: color 0.15s;
+    }
+    .nav-mobile a:hover {
+      color: var(--color-dark);
+    }
+    .nav-mobile-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .nav-mobile-buttons .btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* ─── FOOTER ─── */
+    .site-footer {
+      background: var(--color-dark-surf);
+      padding: 4rem 0 3rem;
+    }
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 48px;
+    }
+    .footer-brand-wordmark {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: #FFFFFF;
+      letter-spacing: -0.01em;
+    }
+    .footer-brand-tagline {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.5);
+      max-width: 240px;
+      line-height: 1.55;
+      margin-top: 10px;
+    }
+    .footer-columns {
+      display: flex;
+      gap: 56px;
+    }
+    .footer-col-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 18px;
+    }
+    .footer-col a {
+      display: block;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.6);
+      line-height: 2.4;
+      transition: color 0.15s;
+    }
+    .footer-col a:hover {
+      color: #FFFFFF;
+    }
+    .footer-bottom {
+      margin-top: 56px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-bottom span,
+    .footer-bottom a {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.04em;
+    }
+    .footer-bottom a {
+      transition: color 0.15s;
+    }
+    .footer-bottom a:hover {
+      color: rgba(255,255,255,0.7);
+    }
+    .footer-legal {
+      display: flex;
+      gap: 20px;
+    }
+
+    /* ─── HERO (humanize) ─── */
+    .h-hero {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      padding: 0;
+    }
+
+    .h-hero::before,
+    .h-hero::after { display: none; }
+
+    .grain { display: none; }
+
+    /* Hero buttons use global .btn system */
+
+    /* Hero content */
+    .h-hero-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 72px 48px 88px;
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .h-eyebrow {
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.1s forwards;
+    }
+
+    .h-headline {
+      font-family: var(--h-font-sans);
+      font-size: var(--text-hero);
+      font-weight: 500;
+      letter-spacing: var(--text-hero-tracking);
+      line-height: var(--text-hero-lh);
+      color: var(--h-ink);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.2s forwards;
+    }
+
+    .h-sub {
+      font-size: var(--text-body);
+      line-height: var(--text-body-lh);
+      color: var(--h-gray-1);
+      font-weight: 400;
+      margin-bottom: 32px;
+      max-width: 100%;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.3s forwards;
+    }
+
+    .h-cta-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.4s forwards;
+    }
+
+    /* Hero button arrow handled by global .btn svg */
+
+    .showcase-wrap {
+      position: relative;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.5s forwards;
+    }
+
+    /* Showcase panel */
+    .showcase {
+      position: relative;
+    }
+
+    .showcase-panel {
+      background: var(--h-white);
+      border: none;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow:
+        0 2px 12px -4px rgba(0,0,0,0.1),
+        0 16px 40px -16px rgba(0,0,0,0.15);
+      min-height: 400px;
+      max-height: 480px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Participant row */
+    .participants {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--h-gray-5);
+    }
+
+    .participant {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      position: relative;
+      flex-shrink: 0;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .participant::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.35) 100%);
+      border-radius: inherit;
+    }
+
+    .participant-initials {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.95);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      z-index: 1;
+    }
+
+    .participant.active {
+      box-shadow:
+        0 0 0 2px var(--h-white),
+        0 0 0 3.5px var(--h-green);
+      animation: borderPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes borderPulse {
+      0%, 100% { box-shadow: 0 0 0 2px var(--h-white), 0 0 0 3.5px var(--h-green); }
+      50% { box-shadow: 0 0 0 2px var(--h-white), 0 0 0 5px rgba(22, 163, 74, 0.4); }
+    }
+
+    .participant-count {
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--h-gray-1);
+      margin-left: 6px;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--h-green);
+      position: relative;
+    }
+
+    .live-dot::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: var(--h-green);
+      opacity: 0.3;
+      animation: breathe 2s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(0.8); opacity: 0.4; }
+      50% { transform: scale(1.6); opacity: 0; }
+    }
+
+    .panel-divider {
+      color: var(--h-gray-3);
+    }
+
+    /* Question pill */
+    .question-pill {
+      margin-top: 20px;
+      background: var(--h-bg);
+      border: 1px solid var(--h-gray-5);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .question-text {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--h-ink);
+      letter-spacing: -0.01em;
+      flex: 1;
+      transition: opacity 0.4s ease;
+    }
+
+    .question-arrow {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--h-ink);
+      color: var(--h-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .question-arrow svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    /* Slides container */
+    .slides {
+      flex: 1;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .slide-label {
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--h-gray-1);
+      flex-shrink: 0;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 16px 0 20px;
+      min-height: 0;
+    }
+
+    .slide-footer {
+      flex-shrink: 0;
+      padding-top: 16px;
+      border-top: 1px solid var(--h-gray-5);
+    }
+
+    /* Slide 1 - theme clusters */
+    .themes {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .theme-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 14px;
+      background: var(--h-bg);
+      border: 1px solid var(--h-gray-5);
+      border-radius: 8px;
+    }
+
+    .theme-row.lead {
+      background: #E8E2D4;
+      border-color: #DDD5C3;
+    }
+
+    .theme-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .theme-name {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--h-ink);
+      letter-spacing: -0.005em;
+    }
+
+    .theme-row.lead .theme-name { color: var(--h-ink); }
+
+    .theme-sub {
+      font-family: var(--h-font-mono);
+      font-size: 8px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--h-gray-1);
+    }
+
+    .theme-row.lead .theme-sub { color: var(--h-gray-1); }
+
+    .theme-count {
+      font-family: var(--h-font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--h-gray-1);
+      letter-spacing: -0.01em;
+    }
+
+    .theme-row.lead .theme-count { color: var(--h-ink); }
+
+    .h-quote {
+      border-left: 2px solid var(--h-ink);
+      padding-left: 12px;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--h-ink-2);
+      font-weight: 400;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 14px;
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--h-gray-1);
+      padding-top: 16px;
+      border-top: 1px solid var(--h-gray-5);
+    }
+
+    .stat-row span + span::before {
+      content: '\00B7';
+      margin-right: 14px;
+      color: var(--h-gray-3);
+    }
+
+    /* Slide 2 - phrase pills */
+    .phrase-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .phrase {
+      background: var(--h-bg);
+      border: 1px solid var(--h-gray-4);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: var(--h-ink-2);
+      font-weight: 400;
+      opacity: 0;
+      transform: translateY(6px);
+      animation: phraseIn 0.4s ease forwards;
+    }
+
+    .slide:not(.active) .phrase {
+      animation: none;
+      opacity: 0;
+    }
+
+    .slide.active .phrase:nth-child(1) { animation-delay: 0.1s; }
+    .slide.active .phrase:nth-child(2) { animation-delay: 0.18s; }
+    .slide.active .phrase:nth-child(3) { animation-delay: 0.26s; }
+    .slide.active .phrase:nth-child(4) { animation-delay: 0.34s; }
+    .slide.active .phrase:nth-child(5) { animation-delay: 0.42s; }
+    .slide.active .phrase:nth-child(6) { animation-delay: 0.5s; }
+
+    @keyframes phraseIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .source-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--h-gray-3), var(--h-gray-2));
+    }
+
+    .source-text {
+      font-size: 12px;
+      color: var(--h-gray-1);
+      line-height: 1.4;
+    }
+
+    .source-text strong {
+      color: var(--h-ink);
+      font-weight: 500;
+    }
+
+    /* Slide 1 - packaging concepts */
+    .concept-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .concept {
+      border: 1px solid var(--h-gray-4);
+      border-radius: 10px;
+      padding: 8px;
+      background: var(--h-bg);
+      position: relative;
+    }
+
+    .concept-thumb {
+      width: 100%;
+      aspect-ratio: 2 / 1;
+      border-radius: 6px;
+      background: linear-gradient(135deg, var(--h-gray-5), var(--h-gray-4));
+      margin-bottom: 6px;
+    }
+
+    .concept.winner .concept-thumb {
+      background: linear-gradient(135deg, #e8e1d4, #d4c8b0);
+    }
+
+    .winner-tag {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--h-ink);
+      color: var(--h-white);
+      font-family: var(--h-font-mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    .concept-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .concept-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--h-ink);
+    }
+
+    .concept-pct {
+      font-family: var(--h-font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--h-ink);
+    }
+
+    .concept:not(.winner) .concept-pct {
+      color: var(--h-gray-1);
+    }
+
+    /* Slide 3 - value bars */
+    .bars {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .bar-item {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--h-ink);
+    }
+
+    .bar-pct {
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      color: var(--h-gray-1);
+    }
+
+    .bar-track {
+      height: 3px;
+      background: var(--h-gray-5);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: var(--h-ink);
+      border-radius: 2px;
+      width: 0;
+      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide.active .bar-fill {
+      width: var(--w);
+    }
+
+    /* Slide 5 - signal report Gen Z vs Millennials */
+    .compare-header {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 14px;
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .legend {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--h-gray-1);
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+    }
+
+    .legend-dot.genz { background: var(--h-ink); }
+    .legend-dot.mill { background: var(--h-gray-3); }
+
+    .compare-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .compare-row {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .compare-label {
+      font-size: 12px;
+      color: var(--h-ink);
+      font-weight: 500;
+    }
+
+    .compare-bar-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .compare-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .compare-track {
+      flex: 1;
+      height: 6px;
+      background: var(--h-gray-5);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .compare-fill {
+      height: 100%;
+      width: 0;
+      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .compare-fill.genz { background: var(--h-ink); }
+    .compare-fill.mill { background: var(--h-gray-3); }
+
+    .slide.active .compare-fill { width: var(--w); }
+
+    .compare-pct {
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      color: var(--h-gray-1);
+      width: 28px;
+      text-align: right;
+    }
+
+    .signal-footer {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--h-gray-1);
+    }
+
+    /* Video pip */
+    .video-pip {
+      position: absolute;
+      top: -16px;
+      right: -20px;
+      width: 88px;
+      height: 88px;
+      border-radius: 14px;
+      overflow: hidden;
+      z-index: 5;
+      box-shadow:
+        0 2px 8px -2px rgba(0,0,0,0.08),
+        0 12px 32px -12px rgba(14, 14, 12, 0.12);
+      border: none;
+      background: var(--h-gray-3);
+    }
+
+    .pip-stage {
+      position: absolute;
+      inset: 0;
+    }
+
+    .pip-person {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pip-person.active {
+      opacity: 1;
+    }
+
+    .pip-person::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.55) 100%);
+    }
+
+    .pip-initials {
+      font-family: var(--h-font-sans);
+      font-size: 22px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.95);
+      letter-spacing: -0.02em;
+      z-index: 1;
+      margin-top: -6px;
+    }
+
+    .pip-meta {
+      position: absolute;
+      bottom: 8px;
+      right: 10px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+    }
+
+    .pip-rec {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .pip-rec-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #ef4444;
+      animation: recPulse 1.4s ease-in-out infinite;
+    }
+
+    @keyframes recPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .pip-rec-label {
+      font-family: var(--h-font-mono);
+      font-size: 8px;
+      color: var(--h-white);
+      letter-spacing: 0.08em;
+      font-weight: 500;
+    }
+
+    /* Waveform */
+    .pip-wave {
+      position: absolute;
+      bottom: 8px;
+      left: 10px;
+      z-index: 2;
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 14px;
+    }
+
+    .pip-wave span {
+      width: 2px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 1px;
+      animation: wave 1s ease-in-out infinite;
+    }
+
+    .pip-wave span:nth-child(1) { height: 30%; animation-delay: 0s; }
+    .pip-wave span:nth-child(2) { height: 70%; animation-delay: 0.15s; }
+    .pip-wave span:nth-child(3) { height: 100%; animation-delay: 0.3s; }
+    .pip-wave span:nth-child(4) { height: 60%; animation-delay: 0.45s; }
+    .pip-wave span:nth-child(5) { height: 40%; animation-delay: 0.6s; }
+
+    @keyframes wave {
+      0%, 100% { transform: scaleY(0.4); }
+      50% { transform: scaleY(1); }
+    }
+
+    /* Progress bar */
+    .progress {
+      margin-top: 18px;
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+    }
+
+    .progress-tick {
+      width: 22px;
+      height: 8px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      border: none;
+      padding: 0;
+      transition: background 0.2s ease;
+    }
+
+    .progress-tick::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      bottom: -10px;
+      left: -2px;
+      right: -2px;
+    }
+
+    .progress-tick:hover {
+      background: rgba(255,255,255,0.25);
+    }
+
+    .progress-tick.active::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--hw-beige);
+      transform-origin: left;
+      animation: fillBar 5s linear forwards;
+    }
+
+    .progress-tick.complete::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--hw-beige);
+    }
+
+    @keyframes fillBar {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── LOGO BAR ─── */
+    .sec-logos {
+      padding: 24px 0;
+      overflow: hidden;
+      background: var(--h-bg);
+    }
+    .logos-eyebrow {
+      font-family: var(--h-font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--h-gray-1);
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .logos-scroll-wrap {
+      position: relative;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    }
+    .logos-track {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      width: max-content;
+      animation: logoScroll 45s linear infinite;
+    }
+    .logos-scroll-wrap:hover .logos-track {
+      animation-play-state: paused;
+    }
+    @keyframes logoScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .logo-item {
+      flex-shrink: 0;
+      padding: 0 36px;
+      font-family: var(--h-font-sans);
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--h-gray-2);
+      white-space: nowrap;
+    }
+
+    /* ─── METRICS ROW ─── */
+    .sec-metrics { background: var(--h-bg); padding: var(--section-pad-y) 0; }
+    .sec-metrics > .container { max-width: 1140px; padding: 0 48px; }
+    .metrics-header { margin-bottom: var(--sub-to-content); }
+    .metrics-header p {
+      font-size: 1rem;
+      color: var(--h-gray-1);
+      max-width: 100%;
+      margin-top: 1.25rem;
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--ds-card-gap);
+    }
+    .metric-card {
+      background: var(--hw-card-bg);
+      border-radius: var(--ds-card-radius);
+      padding: var(--ds-card-pad);
+      height: 14rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      position: relative;
+    }
+    .metric-card.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .metric-card-label {
+      font-size: 0.875rem;
+      text-transform: capitalize;
+      color: var(--h-gray-1);
+    }
+    .metric-card-num {
+      font-size: 80px;
+      font-weight: 500;
+      line-height: 1;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.25rem;
+      color: var(--h-ink);
+    }
+    .metric-card-unit {
+      font-size: 32px;
+      color: var(--h-gray-2);
+      vertical-align: baseline;
+    }
+    .metric-card-caption {
+      font-size: 0.875rem;
+      color: var(--h-gray-1);
+    }
+
+    /* ─── PLATFORM ─── */
+    .platform { background: var(--h-bg); }
+    .platform > .pl-header,
+    .platform > .pl-row { max-width: 1140px; margin-left: auto; margin-right: auto; padding-left: 48px; padding-right: 48px; }
+
+    .pl-header {
+      margin-bottom: var(--sub-to-content);
+      max-width: 100%;
+    }
+    .pl-header h2 { margin-bottom: 0;
+    }
+
+    .pl-row {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 56px;
+      align-items: start;
+    }
+
+    .pl-visual {
+      background: var(--h-white);
+      border: 1px solid var(--pl-line);
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      height: 640px;
+    }
+    .pl-panel {
+      display: none;
+      height: 100%;
+      flex-direction: column;
+    }
+    .pl-panel.active {
+      display: flex;
+      animation: plFadeIn 280ms ease;
+    }
+    @keyframes plFadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .panel-body {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .visual-chrome {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--pl-line);
+      background: var(--hw-card-bg);
+      flex-shrink: 0;
+    }
+    .chrome-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--pl-ink-2);
+    }
+    .pl-live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--pl-green);
+      box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.18);
+    }
+    .chrome-right {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--pl-ink-3);
+      text-transform: uppercase;
+    }
+    .visual-foot {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 22px;
+      border-top: 1px solid var(--pl-line);
+      background: var(--hw-card-bg);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--pl-ink-2);
+      flex-shrink: 0;
+    }
+    .pl-bars { display: flex; align-items: end; gap: 2px; height: 14px; }
+    .pl-bars span { width: 2px; background: var(--pl-ink-2); border-radius: 1px; }
+    .pl-bars span:nth-child(1) { height: 30%; }
+    .pl-bars span:nth-child(2) { height: 60%; }
+    .pl-bars span:nth-child(3) { height: 45%; }
+    .pl-bars span:nth-child(4) { height: 80%; }
+    .pl-bars span:nth-child(5) { height: 55%; }
+    .pl-bars span:nth-child(6) { height: 95%; }
+    .pl-bars span:nth-child(7) { height: 70%; }
+    .pl-bars span:nth-child(8) { height: 40%; }
+
+    /* Panel 1: scrolling feed */
+    .feed-mask {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+      mask-image: linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+    }
+    .feed-track {
+      display: flex;
+      flex-direction: column;
+      animation: plScroll 38s linear infinite;
+    }
+    @keyframes plScroll {
+      from { transform: translateY(0); }
+      to { transform: translateY(-50%); }
+    }
+    .feed-row {
+      display: grid;
+      grid-template-columns: 14px 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 13px 22px;
+      font-size: 13px;
+      color: var(--pl-ink);
+      border-bottom: 1px solid rgba(26, 26, 24, 0.04);
+      flex-shrink: 0;
+    }
+    .feed-row.live { background: rgba(74, 124, 89, 0.05); }
+    .feed-row.live .study-name { font-weight: 500; }
+    .pl-status { width: 6px; height: 6px; border-radius: 50%; background: rgba(26, 26, 24, 0.18); }
+    .feed-row.live .pl-status { background: var(--pl-green); box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.18); }
+    .study-name { font-size: 13px; letter-spacing: -0.005em; }
+    .pl-meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      color: var(--pl-ink-3);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .pl-meta .live-tag { color: var(--pl-green); font-weight: 500; }
+
+    /* Panel 2: speakers + scrolling caption */
+    .conv-body {
+      padding: 28px 26px 20px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .speakers {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-shrink: 0;
+    }
+    .speaker {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      position: relative;
+      display: flex;
+      align-items: end;
+      padding: 8px;
+      overflow: hidden;
+    }
+    .speaker .pl-avatar { position: absolute; inset: 0; }
+    .speaker:nth-child(1) .pl-avatar { background: linear-gradient(135deg, #c9b89d 0%, #8a7a5e 100%); }
+    .speaker:nth-child(2) .pl-avatar { background: linear-gradient(135deg, #b3a896 0%, #6b6354 100%); }
+    .speaker:nth-child(3) .pl-avatar { background: linear-gradient(135deg, #d6c8b0 0%, #9a8a6e 100%); }
+    .speaker:nth-child(4) .pl-avatar { background: linear-gradient(135deg, #b8a890 0%, #7a6e58 100%); }
+    .speaker:nth-child(5) .pl-avatar { background: linear-gradient(135deg, #c4b59c 0%, #82755e 100%); }
+    .speaker:nth-child(6) .pl-avatar { background: linear-gradient(135deg, #cebc9e 0%, #8e7d62 100%); }
+    .speaker .label {
+      position: relative;
+      z-index: 1;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: white;
+      letter-spacing: 0.08em;
+      background: rgba(26, 26, 24, 0.6);
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .speaker.live .label::before { content: "\25CF "; color: var(--pl-green); }
+
+    .caption-area {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 25%, #000 100%);
+      mask-image: linear-gradient(180deg, transparent 0%, #000 25%, #000 100%);
+    }
+    .caption-track {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      animation: plCaptionScroll 32s linear infinite;
+    }
+    @keyframes plCaptionScroll {
+      from { transform: translateY(0); }
+      to { transform: translateY(-50%); }
+    }
+    .caption-line {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 14px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--pl-ink);
+    }
+    .caption-line .who {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--pl-ink-3);
+      letter-spacing: 0.08em;
+      padding-top: 3px;
+    }
+
+    /* Panel 2: Live Market View */
+    .lmv-body {
+      padding: 16px 18px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow-y: auto;
+    }
+    .lmv-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .lmv-metric-card {
+      background: var(--h-white);
+      border: 0.5px solid var(--h-line);
+      border-radius: 10px;
+      padding: 14px 12px;
+    }
+    .lmv-metric-label {
+      font-family: var(--h-font-mono);
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--pl-ink-3);
+      margin-bottom: 6px;
+    }
+    .lmv-metric-num {
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--pl-ink);
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .lmv-metric-sub {
+      font-family: var(--h-font-mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--pl-ink-3);
+      margin-top: 6px;
+      text-transform: uppercase;
+    }
+    .lmv-metric-sub.lmv-green { color: var(--pl-green); }
+    .lmv-metric-sub.lmv-coral { color: #C47A4A; }
+    .lmv-coral-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #C47A4A;
+      animation: coralPulse 1.6s ease-in-out infinite;
+    }
+    @keyframes coralPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .lmv-section-label {
+      font-family: var(--h-font-mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--pl-ink-3);
+    }
+    .lmv-questions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .lmv-q-card {
+      display: flex;
+      gap: 14px;
+      background: var(--h-white);
+      border: 0.5px solid var(--h-line);
+      border-radius: 10px;
+      padding: 14px 14px;
+    }
+    .lmv-q-card.lmv-q-active {
+      background: #F5EFEA;
+      border-color: rgba(196, 122, 74, 0.25);
+    }
+    .lmv-q-left { flex: 1; min-width: 0; }
+    .lmv-q-time {
+      font-family: var(--h-font-mono);
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--pl-ink-3);
+      margin-bottom: 5px;
+    }
+    .lmv-q-card.lmv-q-active .lmv-q-time { color: var(--pl-ink-3); }
+    .lmv-q-question {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--pl-ink);
+      letter-spacing: -0.005em;
+      line-height: 1.35;
+      margin-bottom: 4px;
+    }
+    .lmv-q-answer {
+      font-size: 12px;
+      color: var(--pl-ink-2);
+      line-height: 1.45;
+    }
+    .lmv-q-viz {
+      flex-shrink: 0;
+      width: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 4px;
+    }
+    .lmv-q-viz svg { display: block; }
+    .lmv-q-viz-label {
+      font-family: var(--h-font-mono);
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--pl-ink-3);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .lmv-q-viz-label.lmv-green { color: var(--pl-green); }
+    .lmv-q-viz-label.lmv-coral { color: #C47A4A; }
+
+    /* Panel 3: decision view */
+    .dec-body {
+      padding: 28px 32px;
+      height: 100%;
+    }
+    .dec-headline {
+      font-size: 11px;
+      color: var(--pl-ink-3);
+      font-family: 'IBM Plex Mono', monospace;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .dec-answer {
+      font-size: 21px;
+      font-weight: 500;
+      line-height: 1.32;
+      color: var(--pl-ink);
+      letter-spacing: -0.015em;
+      margin-bottom: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--pl-line);
+    }
+    .dec-section-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--pl-ink-3);
+      margin-bottom: 14px;
+    }
+    .reasons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .reason {
+      display: grid;
+      grid-template-columns: 110px 1fr 40px;
+      gap: 16px;
+      align-items: center;
+      font-size: 12.5px;
+    }
+    .reason-label { color: var(--pl-ink); }
+    .reason-bar {
+      height: 6px;
+      background: rgba(26, 26, 24, 0.06);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .reason-bar-fill {
+      height: 100%;
+      background: var(--pl-beige);
+      border-radius: 3px;
+    }
+    .reason.primary .reason-bar-fill { background: var(--pl-green); }
+    .reason-pct {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--pl-ink-2);
+      text-align: right;
+    }
+    .dec-meta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--pl-line);
+      border: 1px solid var(--pl-line);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+    .dec-meta-item {
+      background: var(--h-white);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .dec-meta-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--pl-ink-3);
+    }
+    .dec-meta-value {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--pl-ink);
+      letter-spacing: -0.01em;
+    }
+    .recommendation {
+      border: 1px solid var(--pl-line);
+      border-left: 2px solid var(--pl-green);
+      border-radius: 8px;
+      padding: 16px 18px;
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+    .rec-icon {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 16px;
+      color: var(--pl-green);
+      line-height: 1.5;
+      font-weight: 500;
+    }
+    .rec-text {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--pl-ink);
+      letter-spacing: -0.005em;
+    }
+
+    /* Pillars (Scale / Depth / Speed) */
+    .pl-pillars {
+      display: flex;
+      flex-direction: column;
+      gap: 64px;
+      max-width: 720px;
+    }
+    .pl-pillar-visual {
+      margin-bottom: 24px;
+    }
+    .pl-pillar-num {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--pl-ink-3);
+      margin-bottom: 0.35rem;
+      display: block;
+      text-transform: capitalize;
+    }
+    .pl-pillar-title {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--pl-ink);
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+    .pl-pillar-body {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--pl-ink-2);
+    }
+
+    /* ── Shared visual card ── */
+    .plv-card {
+      background: var(--h-bg);
+      border: 1px solid var(--h-line);
+      border-radius: var(--ds-card-radius);
+      overflow: hidden;
+    }
+    .plv-chrome {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--h-line);
+      font-family: var(--h-font-mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--pl-ink-3);
+    }
+    .plv-chrome-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .plv-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--pl-green);
+      flex-shrink: 0;
+    }
+    .plv-body {
+      padding: 18px 16px;
+    }
+    .plv-foot {
+      border-top: 1px solid var(--h-line);
+      padding: 10px 16px;
+      font-family: var(--h-font-mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--pl-ink-3);
+    }
+
+    /* ── Depth: Participant Grid ── */
+    .plv-participants {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .plv-participant {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    .plv-participant-label {
+      position: absolute;
+      bottom: 6px;
+      left: 6px;
+      font-family: var(--h-font-mono);
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #fff;
+      background: rgba(0,0,0,0.45);
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .plv-participant-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--pl-green);
+    }
+    .plv-quotes {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .plv-quote-row {
+      display: flex;
+      gap: 8px;
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--pl-ink-2);
+    }
+    .plv-quote-who {
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--pl-ink-3);
+      flex-shrink: 0;
+      width: 28px;
+    }
+
+    /* ── Speed: Decision View ── */
+    .plv-headline-label {
+      font-family: var(--h-font-mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--pl-ink-3);
+      margin-bottom: 8px;
+    }
+    .plv-headline {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--pl-ink);
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      margin-bottom: 18px;
+    }
+    .plv-reasons-label {
+      font-family: var(--h-font-mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--pl-ink-3);
+      margin-bottom: 10px;
+    }
+    .plv-reason {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .plv-reason:last-child { margin-bottom: 0; }
+    .plv-reason-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--pl-ink);
+      width: 80px;
+      flex-shrink: 0;
+    }
+    .plv-reason-bar {
+      flex: 1;
+      height: 6px;
+      background: var(--h-gray-4);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .plv-reason-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--hw-beige-dark);
+    }
+    .plv-reason.primary .plv-reason-fill {
+      background: var(--coral);
+    }
+    .plv-reason-pct {
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      color: var(--pl-ink-3);
+      width: 28px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* ─── HOW IT WORKS ─── */
+    .how {
+      background: var(--h-bg);
+      padding: var(--section-pad-y) 0;
+      overflow: hidden;
+    }
+
+    .how-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    .how-header {
+      margin-bottom: var(--sub-to-content);
+      max-width: 100%;
+    }
+    .how-header h2 { margin-bottom: 0; }
+
+    /* ── step cards ── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .step-item.in-view { opacity: 1; transform: translateY(0); }
+    .step-item:nth-child(1) { transition-delay: 0s; }
+    .step-item:nth-child(2) { transition-delay: 0.1s; }
+    .step-item:nth-child(3) { transition-delay: 0.2s; }
+    .step-item:nth-child(4) { transition-delay: 0.3s; }
+
+    .step-card {
+      background: var(--hw-card-bg);
+      border: 1px solid var(--h-line);
+      border-radius: var(--ds-card-radius);
+      position: relative;
+      overflow: hidden;
+      min-height: 420px;
+      flex: 1;
+    }
+
+    .visual {
+      position: relative;
+      overflow: hidden;
+      padding: 16px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .step-text {
+      padding: 20px 0 32px;
+    }
+
+    /* ── Card 1: Cycling Prompt ── */
+    .hw-prompt-card {
+      width: 100%;
+      max-width: 100%;
+      background: #fff;
+      border-radius: 14px;
+      padding: 20px 16px 14px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .hw-prompt-text {
+      font-family: var(--h-font-sans);
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--h-ink);
+      line-height: 1.55;
+      min-height: 4.5em;
+      transition: opacity 0.4s ease;
+    }
+    .hw-prompt-text.fade-out { opacity: 0; }
+    .hw-prompt-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .hw-prompt-attach {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--h-line);
+      background: transparent;
+      font-family: var(--h-font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--h-gray-1);
+      cursor: default;
+    }
+    .hw-prompt-attach svg { width: 14px; height: 14px; color: var(--h-gray-2); }
+    .hw-prompt-send {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--coral);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+    }
+    .hw-prompt-send svg { width: 16px; height: 16px; color: #fff; }
+
+    /* ── Card 2: Vertical Recruit ── */
+    .hw-v-recruit {
+      width: 100%;
+      background: #fff;
+      border-radius: 14px;
+      padding: 18px 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .hw-v-section {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--h-line);
+    }
+    .hw-v-section:first-child { padding-top: 0; }
+    .hw-v-section:last-child { border-bottom: none; padding-bottom: 0; }
+    .hw-v-label {
+      font-family: var(--h-font-mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--h-gray-2);
+      margin-bottom: 10px;
+    }
+    .hw-v-chips {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .hw-v-chip {
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 500;
+      border: 1px solid var(--h-line);
+      color: var(--h-gray-1);
+      background: var(--hw-card-bg);
+      text-align: center;
+    }
+    .hw-v-chip--active {
+      background: var(--h-ink);
+      color: #fff;
+      border-color: var(--h-ink);
+    }
+    .hw-v-scale-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .hw-v-scale-num {
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--h-ink);
+      line-height: 1;
+    }
+    .hw-v-scale-caption {
+      font-size: 12px;
+      color: var(--h-gray-2);
+      margin-top: 2px;
+    }
+    .hw-v-avatars {
+      display: flex;
+    }
+    .hw-v-avatars span {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      margin-left: -6px;
+    }
+    .hw-v-avatars span:first-child { margin-left: 0; }
+    .hw-v-recruit-btn {
+      width: 100%;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--coral);
+      border: 1px solid var(--coral);
+      border-radius: 10px;
+      background: transparent;
+      cursor: default;
+      margin-top: 4px;
+    }
+
+    /* ── Card 3: Vertical AI Moderator ── */
+    .hw-v-mod {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .hw-v-video {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #1a1a1a;
+    }
+    .hw-v-video video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 15%;
+      display: block;
+    }
+    .hw-v-video-label {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(0,0,0,0.55);
+      color: #fff;
+      font-family: var(--h-font-mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .hw-v-live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--coral);
+      animation: hwVPulse 2s ease infinite;
+    }
+    @keyframes hwVPulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .hw-v-bar {
+      background: #fff;
+      border-radius: 100px;
+      padding: 10px 14px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      border: 1px solid var(--h-line);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+    }
+    .hw-v-bar-dots {
+      display: flex;
+      gap: 3px;
+      flex-shrink: 0;
+    }
+    .hw-v-bar-dots span {
+      width: 5px;
+      height: 5px;
+      background: var(--h-gray-2);
+      border-radius: 50%;
+      animation: hwVDot 1.4s infinite ease-in-out both;
+    }
+    .hw-v-bar-dots span:nth-child(1) { animation-delay: -0.32s; }
+    .hw-v-bar-dots span:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes hwVDot { 0%,80%,100%{transform:scale(0);opacity:0.5} 40%{transform:scale(1);opacity:1} }
+    .hw-v-bar-text {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--h-ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .hw-v-insight {
+      background: #fff;
+      border: 1px solid var(--h-line);
+      border-radius: 10px;
+      padding: 12px 14px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+    .hw-v-insight-label {
+      font-family: var(--h-font-mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #10b981;
+      margin-bottom: 6px;
+    }
+    .hw-v-insight-text {
+      font-size: 12px;
+      color: var(--h-ink);
+      line-height: 1.45;
+    }
+    .hw-v-insight-track {
+      width: 100%;
+      height: 5px;
+      background: var(--h-gray-4);
+      border-radius: 3px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .hw-v-insight-fill {
+      height: 100%;
+      width: 78%;
+      background: #10b981;
+      border-radius: 3px;
+    }
+
+    /* ── Card 4: Vertical Signal Report ── */
+    .hw-v-report {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .hw-v-report-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 18px 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+    }
+    .hw-v-report-header {
+      font-family: var(--h-font-mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--h-gray-2);
+      margin-bottom: 14px;
+    }
+    .hw-v-finding {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .hw-v-finding:last-child { margin-bottom: 0; }
+    .hw-v-finding-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--h-ink);
+      min-width: 0;
+      flex: 1;
+    }
+    .hw-v-finding-pct {
+      font-family: var(--h-font-mono);
+      font-size: 11px;
+      color: var(--h-gray-2);
+      flex-shrink: 0;
+      width: 30px;
+      text-align: right;
+    }
+    .hw-v-finding-bar {
+      flex-shrink: 0;
+      width: 50px;
+      height: 5px;
+      background: var(--h-gray-4);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .hw-v-finding-fill {
+      height: 100%;
+      background: var(--coral);
+      border-radius: 3px;
+    }
+    .hw-v-quote {
+      background: #fff;
+      border: 1px solid var(--h-line);
+      border-left: 3px solid var(--coral);
+      border-radius: 0 10px 10px 0;
+      padding: 14px 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    }
+    .hw-v-quote-text {
+      font-family: 'IBM Plex Serif', serif;
+      font-style: italic;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--h-ink);
+      margin-bottom: 8px;
+    }
+    .hw-v-quote-attr {
+      font-family: var(--h-font-mono);
+      font-size: 9px;
+      color: var(--h-gray-3);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hw-prompt-text { transition: none; }
+      .hw-v-live-dot { animation: none; }
+      .hw-v-bar-dots span { animation: none; }
+    }
+
+    .step-num {
+      font-family: var(--h-font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--h-gray-3);
+      margin-bottom: 10px;
+    }
+
+    .step-title {
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: -0.015em;
+      color: var(--h-ink);
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+
+    .step-desc {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--h-gray-1);
+    }
+
+    /* ═══════════════════════════════════════════
+       STEP 1 — Composer
+       ═══════════════════════════════════════════ */
+    .composer {
+      position: relative;
+      left: auto;
+      top: auto;
+      transform: scale(0.96);
+      width: 100%;
+      max-width: 360px;
+      background: var(--h-white);
+      border: 1px solid var(--h-line);
+      border-radius: 14px;
+      padding: 18px 20px;
+      opacity: 0;
+      transition: opacity 0.7s ease 0.2s, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+    }
+
+    .step-card.in-view .composer {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .composer-label {
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--h-gray-3);
+      margin-bottom: 10px;
+    }
+
+    .composer-input {
+      font-size: 15px;
+      color: var(--h-ink);
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+
+    .composer-input.typed { color: var(--h-ink); }
+
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: var(--h-ink);
+      vertical-align: text-bottom;
+      animation: blink .8s step-end infinite;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .composer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .composer-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--h-font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--h-gray-2);
+      cursor: default;
+    }
+
+    .composer-chip svg { width: 14px; height: 14px; }
+
+    .composer-send {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--h-ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .composer-send svg {
+      width: 14px;
+      height: 14px;
+      color: var(--h-white);
+    }
+
+    /* ═══════════════════════════════════════════
+       STEP 2 — Recruit
+       ═══════════════════════════════════════════ */
+    .recruit-stage {
+      position: relative;
+      width: 100%;
+      max-width: 360px;
+      min-height: 220px;
+    }
+
+    .recruit-wrap {
+      display: contents;
+    }
+
+    .recruit-front {
+      background: var(--h-white);
+      border: 1px solid var(--h-line);
+      border-radius: 12px;
+      padding: 16px 18px;
+      width: 75%;
+    }
+
+    .recruit-back {
+      position: absolute;
+      bottom: 35px;
+      right: -10px;
+      background: var(--h-white);
+      border: 1px solid var(--h-line);
+      border-radius: 12px;
+      padding: 16px 18px;
+      width: 55%;
+      box-shadow: 0 2px 8px -2px rgba(0,0,0,0.06);
+    }
+
+    .mini-label {
+      display: block;
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--h-gray-2);
+      margin-bottom: 12px;
+    }
+
+    .recruit-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .recruit-chip {
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid var(--h-line);
+      color: var(--h-gray-1);
+      background: var(--h-bg);
+      cursor: default;
+      transition: .2s;
+    }
+
+    .recruit-chip.active {
+      background: var(--h-ink);
+      color: var(--h-white);
+      border-color: var(--h-ink);
+    }
+
+    .recruit-btn {
+      display: block;
+      width: 100%;
+      margin-top: 12px;
+      padding: 8px 0;
+      text-align: center;
+      font-family: var(--h-font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--coral);
+      border: 1px solid var(--coral);
+      border-radius: 8px;
+      background: transparent;
+      cursor: default;
+    }
+
+    .recruit-scale {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .recruit-scale-num {
+      font-family: var(--h-font-sans);
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--h-ink);
+      line-height: 1;
+    }
+
+    .recruit-scale-label {
+      font-size: 12px;
+      color: var(--h-gray-2);
+      margin-top: 2px;
+    }
+
+    .avatar-stack {
+      display: flex;
+    }
+
+    .avatar-stack div {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--h-white);
+      margin-left: -8px;
+    }
+
+    .avatar-stack div:first-child { margin-left: 0; }
+
+    /* ═══════════════════════════════════════════
+       STEP 3 — Sessions
+       ═══════════════════════════════════════════ */
+    .sessions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      width: 100%;
+      max-width: 380px;
+    }
+    .session-tile {
+      background: var(--h-white);
+      border: 1px solid var(--h-line);
+      border-radius: 10px;
+      padding: 12px 14px;
+      box-shadow: 0 2px 8px -2px rgba(0,0,0,0.06);
+    }
+    .session-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .session-name {
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--h-ink);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .session-time {
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      color: var(--h-gray-3);
+    }
+    .session-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--coral);
+      display: inline-block;
+      animation: sessionPulse 2s ease infinite;
+    }
+    .session-dot--still {
+      animation: none;
+      opacity: 0.4;
+    }
+    @keyframes sessionPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .session-wave {
+      display: flex;
+      gap: 2px;
+      align-items: flex-end;
+      height: 18px;
+    }
+    .session-wave span {
+      width: 2.5px;
+      border-radius: 2px;
+      background: var(--h-gray-4);
+    }
+    .session-wave--active span {
+      background: var(--coral);
+      animation: sessionBar 1.4s ease-in-out infinite;
+    }
+    .session-wave--active span:nth-child(1) { animation-delay: 0s; }
+    .session-wave--active span:nth-child(2) { animation-delay: 0.15s; }
+    .session-wave--active span:nth-child(3) { animation-delay: 0.3s; }
+    .session-wave--active span:nth-child(4) { animation-delay: 0.45s; }
+    .session-wave--active span:nth-child(5) { animation-delay: 0.6s; }
+    @keyframes sessionBar {
+      0%, 100% { height: 4px; }
+      50% { height: 16px; }
+    }
+    .session-wave--still span {
+      background: var(--h-gray-4);
+    }
+    .session-quote {
+      background: var(--h-white);
+      border: 1px solid var(--h-line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 11px;
+      line-height: 1.45;
+      color: var(--h-ink);
+      box-shadow: 0 4px 12px -3px rgba(0,0,0,0.1);
+      margin-top: 8px;
+    }
+
+    .insight-label {
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--h-green);
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .insight-text {
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--h-ink);
+    }
+
+    /* ═══════════════════════════════════════════
+       STEP 4 — Answer
+       ═══════════════════════════════════════════ */
+    .answer-stage {
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .answer-card {
+      background: var(--h-white);
+      border: 1px solid var(--h-line);
+      border-radius: 12px;
+      padding: 20px 22px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .answer-left {
+      flex-shrink: 0;
+    }
+
+    .answer-headline {
+      margin-top: 8px;
+    }
+
+    .answer-num {
+      font-family: var(--h-font-sans);
+      font-size: 36px;
+      font-weight: 600;
+      color: var(--h-ink);
+      line-height: 1;
+    }
+
+    .answer-caption {
+      font-size: 12px;
+      color: var(--h-gray-2);
+      margin-top: 4px;
+    }
+
+    .answer-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .answer-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .answer-bar-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--h-ink-2);
+      min-width: 72px;
+    }
+
+    .answer-bar-track {
+      flex: 1;
+      height: 5px;
+      background: var(--h-gray-5);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .answer-bar-fill {
+      height: 100%;
+      background: var(--coral);
+      border-radius: 3px;
+      width: 0%;
+      transition: width .9s ease;
+    }
+
+    .step-card.in-view .answer-bar:nth-child(1) .answer-bar-fill { width: 78%; }
+    .step-card.in-view .answer-bar:nth-child(2) .answer-bar-fill { width: 66%; }
+    .step-card.in-view .answer-bar:nth-child(3) .answer-bar-fill { width: 61%; }
+
+    .answer-quote {
+      background: var(--h-white);
+      border: 1px solid var(--h-line);
+      border-left: 3px solid var(--coral);
+      border-radius: 0 10px 10px 0;
+      padding: 14px 16px;
+      margin-top: 10px;
+      box-shadow: 0 2px 8px -2px rgba(0,0,0,0.06);
+    }
+    .answer-quote__text {
+      font-size: 12.5px;
+      font-style: italic;
+      line-height: 1.5;
+      color: var(--h-ink);
+      margin-bottom: 6px;
+    }
+    .answer-quote__attr {
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      color: var(--h-gray-3);
+    }
+
+    .answer-bar-pct {
+      font-family: var(--h-font-mono);
+      font-size: 11px;
+      color: var(--h-gray-2);
+      min-width: 28px;
+      text-align: right;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cursor { animation: none; }
+      .session-wave--active span { animation: none; height: 8px; }
+      .session-dot { animation: none; }
+      .step-card { transition: none; opacity: 1; transform: none; }
+      .answer-bar-fill { transition: none; }
+    }
+
+    @media (max-width: 1024px) {
+      .steps { grid-template-columns: repeat(2, 1fr); }
+      .step-card { min-height: 360px; }
+    }
+    @media (max-width: 640px) {
+      .how { padding: var(--section-pad-y) 0; }
+      .how-inner { padding: 0 24px; }
+      .how-header { margin-bottom: 48px; }
+      .steps { grid-template-columns: 1fr; }
+      .step-card { min-height: 320px; }
+    }
+
+    /* ─── THE METHOD ─── */
+    /* ─── THE TECHNOLOGY ─── */
+    /* ─── TECHNOLOGY ─── */
+    .sec-tech { background: var(--h-bg); }
+    .sec-tech > .container { max-width: 1140px; padding: 0 48px; }
+    .tech-header {
+      margin-bottom: var(--sub-to-content);
+      max-width: 100%;
+    }
+    .tech-header h2 { margin-bottom: 0; }
+    .tech-tabs { display: none; }
+    .tech-tab-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .tech-tab {
+      font-family: var(--h-font-sans);
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--h-gray-1);
+      padding: 8px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--h-line);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tech-tab::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--h-gray-3);
+      flex-shrink: 0;
+      transition: background 0.2s ease;
+    }
+    .tech-tab:hover { color: var(--h-ink); }
+    .tech-tab.active {
+      background: var(--h-white);
+      color: var(--h-ink);
+      border-color: var(--h-line);
+    }
+    .tech-tab.active::before {
+      background: var(--h-green);
+      animation: pulse-dot 2s ease infinite;
+    }
+    .tech-card-outer {
+      background: var(--hw-card-bg);
+      border: 1px solid var(--h-line);
+      border-radius: var(--ds-card-radius);
+      overflow: hidden;
+    }
+    .tech-card-divider { display: none; }
+    .tech-stack { position: relative; }
+    .tech-scroll-spacer { display: none; }
+    .tech-box {
+      padding: 36px 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
+    }
+    .tech-box.active {
+      position: relative;
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .tech-box.tb1, .tech-box.tb2, .tech-box.tb3 {
+      top: 0;
+      z-index: auto;
+    }
+    .tech-box-left {
+      display: flex;
+      flex-direction: column;
+    }
+    .tech-box-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--h-line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      color: var(--h-ink);
+    }
+    .tech-box-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+    .tech-box-title {
+      display: none;
+    }
+    .tech-box-pos {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--h-ink);
+      line-height: 1.45;
+      margin-bottom: 10px;
+    }
+    .tech-box-desc {
+      font-size: 13.5px;
+      color: var(--h-gray-1);
+      line-height: 1.55;
+    }
+    .tech-box-right {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .tech-cap-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--h-line);
+    }
+    .tech-cap-row:first-child { padding-top: 0; }
+    .tech-cap-row:last-child { border-bottom: none; }
+    .tech-cap-num {
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      color: var(--h-gray-1);
+      letter-spacing: 0.08em;
+      min-width: 20px;
+      flex-shrink: 0;
+    }
+    .tech-cap-content { flex: 1; }
+    .tech-cap-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--h-ink);
+      margin-bottom: 4px;
+    }
+    .tech-cap-desc {
+      font-size: 13px;
+      color: var(--h-gray-1);
+      line-height: 1.5;
+    }
+
+    /* ─── USE CASES ─── */
+    .sec-cases { background: var(--h-bg); }
+    .cases-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: var(--sub-to-content);
+      max-width: 1140px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 48px;
+    }
+    .cases-header-left { max-width: 720px; }
+    .sec-cases .cases-header-left h2 { margin-bottom: 0; }
+    .cases-arrows {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+      padding-top: 8px;
+    }
+    .cases-arrow {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--h-line);
+      background: var(--h-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s ease, opacity 0.2s ease;
+      color: var(--h-ink);
+    }
+    .cases-arrow:hover { background: var(--h-gray-5); }
+    .cases-arrow:disabled { opacity: 0.3; pointer-events: none; }
+    .cases-arrow svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .cases-track-wrap {
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-left: max(48px, calc((100vw - 1140px) / 2 + 48px));
+      padding-right: 48px;
+      scroll-padding-left: max(48px, calc((100vw - 1140px) / 2 + 48px));
+      -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
+      mask-image: linear-gradient(to right, black 90%, transparent 100%);
+    }
+    .cases-track-wrap::-webkit-scrollbar { display: none; }
+    .cases-track {
+      display: flex;
+      gap: 16px;
+      width: max-content;
+    }
+    .cc {
+      width: 320px;
+      height: 440px;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--h-line);
+      background: var(--hw-card-bg);
+      transition: box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .cc:hover { box-shadow: 0 4px 16px -4px rgba(0,0,0,0.08); }
+    .cc-photo {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+    }
+    .cc-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .cc-mockup {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: var(--h-white);
+      border: 1px solid var(--h-line);
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: none;
+      max-width: 200px;
+      z-index: 2;
+    }
+    .cc-mockup.pos-tr,
+    .cc-mockup.pos-bl,
+    .cc-mockup.pos-tl,
+    .cc-mockup.pos-br {
+      top: 20px;
+      left: 20px;
+      right: auto;
+      bottom: auto;
+    }
+    .cc-mockup-label {
+      font-size: 0.75rem;
+      text-transform: capitalize;
+      color: var(--h-gray-1);
+      margin-bottom: 0.5rem;
+    }
+    .cc-mockup-q {
+      font-size: 0.875rem;
+      color: var(--h-ink);
+      margin-bottom: 0.5rem;
+    }
+    .cc-mockup-quote {
+      font-family: var(--h-font-sans);
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 1.4;
+      font-style: normal;
+      color: var(--h-gray-1);
+      margin-top: 8px;
+      margin-bottom: 0;
+    }
+    .cc-mockup-meta {
+      font-family: var(--h-font-mono);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--h-gray-1);
+      margin-top: 8px;
+    }
+    .cc-mockup-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .cc-mockup-pill {
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      background: var(--color-beige);
+      border: 1px solid var(--color-divider);
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--color-dark);
+    }
+    .cc-mockup-pill.lg { font-size: 10px; padding: 3px 8px; }
+    .cc-mockup-pill.sage { background: rgba(61,107,94,0.1); border-color: rgba(61,107,94,0.2); color: var(--accent-sage); }
+    .cc-mockup-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(61,107,94,0.1);
+      border: 1px solid rgba(61,107,94,0.2);
+      padding: 3px 8px;
+      border-radius: var(--radius-tag);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      font-weight: 500;
+      color: var(--accent-sage);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .cc-mockup-check {
+      font-family: var(--h-font-sans);
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 3px;
+      color: var(--color-dark);
+    }
+    .cc-mockup-check .ck { color: var(--accent-sage); font-weight: 600; }
+    .cc-mockup-check .cx { color: var(--color-muted); font-weight: 600; }
+    .cc-mockup-bars { display: flex; flex-direction: column; gap: 4px; }
+    .cc-mockup-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--color-dark);
+    }
+    .cc-mockup-bar-track {
+      flex: 1;
+      height: 4px;
+      background: var(--color-divider);
+      border-radius: 2px;
+    }
+    .cc-mockup-bar-fill {
+      height: 100%;
+      background: var(--color-dark);
+      border-radius: 2px;
+    }
+    .cc-mockup-bar-fill.sage { background: var(--accent-sage); }
+    .cc-mockup-funnel { display: flex; flex-direction: column; gap: 2px; }
+    .cc-funnel-stage {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: var(--color-dark);
+      padding: 2px 0;
+    }
+    .cc-funnel-stage.highlight { border-left: 2px solid var(--accent-sage); padding-left: 6px; }
+    .cc-footer {
+      padding: 24px;
+    }
+    .cc-cat {
+      font-size: 12px;
+      text-transform: capitalize;
+      color: var(--h-gray-1);
+      margin-bottom: 0.5rem;
+    }
+    .cc-desc {
+      font-size: 13.5px;
+      color: var(--h-gray-1);
+      line-height: 1.55;
+    }
+
+    /* ─── SIGNAL REPORT ─── */
+    .sec-signal { background: var(--h-bg); }
+    .sec-signal h2 { margin-bottom: 0; }
+    .signal-header {
+      margin-bottom: var(--sub-to-content);
+      max-width: 100%;
+    }
+    .signal-bento {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--ds-card-gap);
+    }
+    .sig-card {
+      background: var(--ds-card-bg);
+      border-radius: var(--ds-card-radius);
+      padding: var(--ds-card-pad);
+      display: flex;
+      flex-direction: column;
+      min-height: 420px;
+      min-width: 0;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .sig-card.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .sig-card.large {
+      padding: var(--ds-card-pad);
+      min-height: 440px;
+    }
+    .sig-card-title {
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--h-ink);
+      margin-bottom: 8px;
+    }
+    .sig-card-desc {
+      font-size: 13.5px;
+      color: var(--h-gray-1);
+      line-height: 1.55;
+      max-width: 420px;
+    }
+    .sig-card-widget {
+      flex: 1;
+      padding-top: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .sig-card-widget:has(.sig-deck-label, .sig-personas-label, .sig-chat-input) {
+      display: grid;
+      grid-template-rows: 1fr auto;
+    }
+    .sig-card-widget:has(.sig-deck-label) > .sig-deck-stack,
+    .sig-card-widget:has(.sig-personas-label) > .sig-personas,
+    .sig-card-widget:has(.sig-chat-input) > .sig-chat {
+      align-self: center;
+    }
+    .sig-bottom-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--ds-card-gap);
+    }
+
+    /* Card 1: Decision drivers */
+    .sig-drivers-label {
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--h-gray-1);
+      margin-bottom: 16px;
+    }
+    .sig-driver-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .sig-driver-row:last-child { margin-bottom: 0; }
+    .sig-driver-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--h-ink);
+      min-width: 120px;
+      text-align: right;
+    }
+    .sig-driver-bar-area {
+      flex: 1;
+      position: relative;
+      height: 6px;
+      background: rgba(0,0,0,0.03);
+      border-radius: 3px;
+    }
+    .sig-driver-axis {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: var(--h-line);
+    }
+    .sig-driver-fill {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.7s ease;
+      width: 0;
+    }
+    .sig-driver-fill.positive { left: 50%; background: var(--h-gray-3); }
+    .sig-driver-fill.negative { right: 50%; background: var(--h-gray-3); }
+    .sig-driver-fill.sage { background: var(--h-green); }
+    .sig-driver-val {
+      font-family: var(--h-font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--h-gray-1);
+      min-width: 36px;
+    }
+    .sig-drivers-insight {
+      margin-top: 20px;
+      padding: 14px 16px;
+      background: var(--h-white);
+      border: 1px solid var(--h-line);
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--h-ink);
+    }
+
+    /* Card 2: Clips */
+    .sig-clips {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .sig-clip-tile {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      flex-shrink: 0;
+      width: 88px;
+      height: 110px;
+    }
+    .sig-clip-tile.center {
+      width: 96px;
+      height: 120px;
+      z-index: 2;
+    }
+    .sig-clip-tile img { width: 100%; height: 100%; object-fit: cover; }
+    .sig-clip-tile::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.2);
+      transition: background 0.2s;
+    }
+    .sig-clip-tile.center::after { background: transparent; }
+    .sig-clip-play {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+    .sig-clip-play::after {
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 8px solid var(--color-dark);
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      margin-left: 2px;
+    }
+    .sig-clip-ts {
+      position: absolute;
+      bottom: 6px;
+      right: 8px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: rgba(255,255,255,0.85);
+      z-index: 2;
+    }
+    .sig-clip-caption {
+      border-left: 2px solid var(--h-ink);
+      padding-left: 14px;
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: var(--h-ink);
+      font-style: italic;
+      font-weight: 400;
+      margin-top: 24px;
+    }
+
+    /* Card 3: Deck */
+    .sig-deck-stack { position: relative; width: 240px; height: 170px; margin: 0 auto; }
+    .sig-slide {
+      position: absolute;
+      width: 210px;
+      height: 140px;
+      background: var(--h-white);
+      border: 1px solid var(--h-line);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .sig-slide.back1 { top: 4px; left: 2px; transform: rotate(-2.5deg); z-index: 1; }
+    .sig-slide.back2 { top: 0; left: 14px; transform: rotate(1.5deg); z-index: 0; }
+    .sig-slide.front { top: 10px; left: 10px; z-index: 2; box-shadow: 0 2px 8px -2px rgba(0,0,0,0.06); }
+    .sig-slide-header {
+      font-family: var(--h-font-mono);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--h-gray-1);
+      margin-bottom: 6px;
+    }
+    .sig-slide-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--h-ink);
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+    .sig-slide-bars { display: flex; flex-direction: column; gap: 5px; }
+    .sig-slide-bar {
+      height: 3px;
+      background: var(--h-gray-3);
+      border-radius: 2px;
+    }
+    .sig-slide-attr {
+      font-family: var(--h-font-mono);
+      font-size: 8px;
+      color: var(--h-gray-1);
+      margin-top: 8px;
+    }
+    .sig-deck-label {
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--h-gray-1);
+      text-align: center;
+      align-self: end;
+      padding-top: 16px;
+    }
+
+    /* Card 4: Chat */
+    .sig-chat { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .sig-chat-msg {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--h-ink);
+    }
+    .sig-chat-msg.user {
+      align-self: flex-end;
+      max-width: 80%;
+      background: var(--h-ink);
+      color: var(--h-white);
+      border-radius: 14px 14px 4px 14px;
+    }
+    .sig-chat-msg.ai {
+      align-self: flex-start;
+      max-width: 88%;
+      background: var(--h-white);
+      border: 1px solid var(--h-line);
+      color: var(--h-ink);
+      border-radius: 14px 14px 14px 4px;
+      margin-top: 6px;
+    }
+    .sig-chat-label {
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--h-gray-1);
+      margin-bottom: 4px;
+    }
+    .sig-chat-label.right { text-align: right; }
+    .sig-phrase-pill {
+      display: inline;
+      background: rgba(22,163,74,0.08);
+      color: var(--h-green);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .sig-chat-input {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px 10px 16px;
+      background: var(--h-white);
+      border: 1px solid var(--h-line);
+      border-radius: 14px;
+      align-self: end;
+    }
+    .sig-chat-input-text {
+      flex: 1;
+      font-size: 12px;
+      color: var(--h-gray-1);
+    }
+    .sig-chat-send {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--h-ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: white;
+      font-size: 11px;
+      border: none;
+    }
+
+    /* Card 5: Personas */
+    .sig-personas {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+    .sig-persona {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: var(--h-white);
+      border: 1px solid var(--h-line);
+      border-radius: 12px;
+    }
+    .sig-persona-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .sig-persona-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .sig-persona-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--h-ink);
+    }
+    .sig-personas-label {
+      font-family: var(--h-font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--h-gray-1);
+      text-align: center;
+      align-self: end;
+      padding-top: 20px;
+    }
+
+    /* ─── COMPARISON ─── */
+    /* ─── FINAL CTA ─── */
+    .sec-final-cta {
+      background: var(--h-bg);
+      padding: 7rem 0;
+      overflow: hidden;
+    }
+    .cta-wall-wrap {
+      position: relative;
+      width: 100%;
+      margin: 0 auto 3rem;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    }
+    .cta-wall-wrap:hover .cta-wall {
+      animation-play-state: paused;
+    }
+    .cta-wall {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: max-content;
+      animation: ctaMarquee 60s linear infinite;
+    }
+    @keyframes ctaMarquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .cta-wall-tile {
+      width: 88px;
+      height: 88px;
+      border-radius: 18px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .cta-wall-tile img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(1);
+      opacity: 0.85;
+    }
+    .cta-text {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 48px;
+      text-align: center;
+    }
+    .cta-text-headline {
+      font-size: var(--text-section);
+      font-weight: 500;
+      color: var(--h-ink);
+      max-width: 100%;
+    }
+    .cta-text-body {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--h-gray-1);
+      max-width: 100%;
+      margin: 0 auto 40px;
+    }
+    .cta-text-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    /* CTA button uses global .btn .btn-primary */
+
+    @media (max-width: 720px) {
+      .metrics-grid { grid-template-columns: 1fr; gap: 16px; }
+      .metric-card { height: auto; padding: 32px 24px; }
+      .metric-card-num { font-size: 64px; }
+      .logos-track { animation-duration: 30s; }
+      .logo-item { font-size: 16px; padding: 0 28px; }
+      .pl-row { grid-template-columns: 1fr; gap: 24px; }
+      .pl-visual { height: 480px; }
+      .pl-pillars { gap: 48px; }
+      .pl-card { padding: 20px; }
+      .platform > .pl-header,
+      .platform > .pl-row { padding-left: 24px; padding-right: 24px; }
+      .tech-tab-bar { flex-wrap: wrap; }
+      .tech-tab { font-size: 12px; padding: 7px 14px; }
+      .tech-box { padding: 24px; grid-template-columns: 1fr; gap: 24px; }
+      .cc { width: 280px; }
+      .cc-photo { height: 260px; }
+      .cases-arrows { display: none; }
+      .cases-track-wrap { padding-left: 24px; padding-right: 24px; scroll-padding-left: 24px; }
+      .signal-bento { grid-template-columns: 1fr; }
+      .sig-bottom-row { grid-template-columns: 1fr; }
+      .signal-header { max-width: 100%; }
+      .sec-final-cta { padding: 96px 0; }
+      .cta-text { padding: 0 24px; }
+      .cta-text-headline { font-size: var(--text-section); }
+      .cta-wall-tile { width: 64px; height: 64px; border-radius: 14px; }
+      .cta-wall { gap: 8px; }
+      .h-hero-inner {
+        grid-template-columns: 1fr;
+        gap: 60px;
+        padding: 40px 24px 80px;
+      }
+      .nav-links,
+      .nav-actions {
+        display: none;
+      }
+      .nav-toggle {
+        display: block;
+      }
+      .footer-top {
+        flex-direction: column;
+        gap: 40px;
+      }
+      .footer-columns {
+        flex-direction: column;
+        gap: 32px;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+    }
+    @media (min-width: 700px) and (max-width: 1099px) {
+      .sig-bottom-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .mm-grid { grid-template-columns: 1fr 1fr; }
+      .tech-box { padding: 32px 36px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="#" class="nav-wordmark">Humanize</a>
+    <div class="nav-links">
+      <a href="#">Platform</a>
+      <a href="#">How it works</a>
+      <a href="#">Clients</a>
+      <a href="#">Pricing</a>
+    </div>
+    <div class="nav-actions">
+      <a href="#" class="btn btn-ghost btn-sm">Sign in</a>
+      <a href="#" class="btn btn-primary btn-sm">Get started</a>
+    </div>
+    <button class="nav-toggle" aria-label="Menu" id="navToggle">
+      <span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" id="navMobile">
+    <a href="#">Platform</a>
+    <a href="#">How it works</a>
+    <a href="#">Clients</a>
+    <a href="#">Pricing</a>
+    <div class="nav-mobile-buttons">
+      <a href="#" class="btn btn-ghost">Sign in</a>
+      <a href="#" class="btn btn-primary">Get started</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<section class="h-hero">
+  <div class="grain"></div>
+
+  <div class="h-hero-inner">
+    <div class="h-hero-text">
+      <div class="h-eyebrow">Consumer intelligence at enterprise scale</div>
+      <h1 class="h-headline">Ask your customers before you make the call.</h1>
+      <p class="h-sub">The research layer for brands that can't afford to be wrong. Hundreds of moderated consumer conversations, run in parallel, returned as a decision with the evidence behind it. In days, not weeks.</p>
+      <div class="h-cta-row">
+        <a href="#" class="btn btn-primary">
+          Ask your first question
+          <svg viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="#" class="btn btn-ghost">Talk to us</a>
+      </div>
+    </div>
+
+    <div class="showcase-wrap">
+    <div class="showcase">
+      <div class="video-pip">
+        <div class="pip-stage" id="pipStage">
+          <div class="pip-person active" style="background: linear-gradient(135deg, #c47a4a 0%, #6b3a1f 100%);">
+            <span class="pip-initials">SR</span>
+          </div>
+          <div class="pip-person" style="background: linear-gradient(135deg, #4a6b8a 0%, #1f3a5c 100%);">
+            <span class="pip-initials">MK</span>
+          </div>
+          <div class="pip-person" style="background: linear-gradient(135deg, #6b5a8a 0%, #3a2a5c 100%);">
+            <span class="pip-initials">JT</span>
+          </div>
+          <div class="pip-person" style="background: linear-gradient(135deg, #5a8a6b 0%, #2a5c3a 100%);">
+            <span class="pip-initials">AL</span>
+          </div>
+          <div class="pip-person" style="background: linear-gradient(135deg, #8a5a4a 0%, #5c2a1f 100%);">
+            <span class="pip-initials">DC</span>
+          </div>
+        </div>
+        <div class="pip-wave">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="pip-meta">
+          <div class="pip-rec">
+            <span class="pip-rec-dot"></span>
+            <span class="pip-rec-label">Live</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase-panel">
+        <div class="participants" id="participants">
+          <div class="participant active" data-i="0" style="background: linear-gradient(135deg, #c47a4a 0%, #6b3a1f 100%);">
+            <span class="participant-initials">SR</span>
+          </div>
+          <div class="participant" data-i="1" style="background: linear-gradient(135deg, #6b5a8a 0%, #3a2a5c 100%);">
+            <span class="participant-initials">JT</span>
+          </div>
+          <div class="participant" data-i="2" style="background: linear-gradient(135deg, #4a6b8a 0%, #1f3a5c 100%);">
+            <span class="participant-initials">MK</span>
+          </div>
+          <div class="participant" data-i="3" style="background: linear-gradient(135deg, #5a8a6b 0%, #2a5c3a 100%);">
+            <span class="participant-initials">AL</span>
+          </div>
+          <div class="participant" data-i="4" style="background: linear-gradient(135deg, #8a5a4a 0%, #5c2a1f 100%);">
+            <span class="participant-initials">DC</span>
+          </div>
+          <span class="participant-count">200 live</span>
+        </div>
+
+        <div class="question-pill">
+          <span class="question-text" id="question">Which packaging design drives intent to purchase?</span>
+          <span class="question-arrow">
+            <svg width="10" height="10" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+
+        <div class="slides" id="slides">
+          <!-- Slide 1: Packaging -->
+          <div class="slide active" data-slide="0">
+            <div class="slide-body">
+              <div class="concept-grid">
+                <div class="concept winner">
+                  <div class="winner-tag">Winner</div>
+                  <div class="concept-thumb"></div>
+                  <div class="concept-meta">
+                    <span class="concept-name">Concept A</span>
+                    <span class="concept-pct">71%</span>
+                  </div>
+                </div>
+                <div class="concept">
+                  <div class="concept-thumb"></div>
+                  <div class="concept-meta">
+                    <span class="concept-name">Concept B</span>
+                    <span class="concept-pct">29%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="slide-footer">
+              <div class="h-quote">"A looks like real food. B looks like a supplement I'd hide in a drawer."</div>
+            </div>
+          </div>
+
+          <!-- Slide 2: Gen Z vs Millennials -->
+          <div class="slide" data-slide="1">
+            <div class="slide-body">
+              <div class="compare-header">
+                <div class="legend"><span class="legend-dot genz"></span>Gen Z</div>
+                <div class="legend"><span class="legend-dot mill"></span>Millennials</div>
+              </div>
+              <div class="compare-bars">
+                <div class="compare-row">
+                  <div class="compare-label">Post-workout</div>
+                  <div class="compare-bar-group">
+                    <div class="compare-bar"><div class="compare-track"><div class="compare-fill genz" style="--w: 78%"></div></div><div class="compare-pct">68%</div></div>
+                    <div class="compare-bar"><div class="compare-track"><div class="compare-fill mill" style="--w: 48%"></div></div><div class="compare-pct">42%</div></div>
+                  </div>
+                </div>
+                <div class="compare-row">
+                  <div class="compare-label">Meal swap</div>
+                  <div class="compare-bar-group">
+                    <div class="compare-bar"><div class="compare-track"><div class="compare-fill genz" style="--w: 60%"></div></div><div class="compare-pct">52%</div></div>
+                    <div class="compare-bar"><div class="compare-track"><div class="compare-fill mill" style="--w: 82%"></div></div><div class="compare-pct">71%</div></div>
+                  </div>
+                </div>
+                <div class="compare-row">
+                  <div class="compare-label">On the go</div>
+                  <div class="compare-bar-group">
+                    <div class="compare-bar"><div class="compare-track"><div class="compare-fill genz" style="--w: 47%"></div></div><div class="compare-pct">41%</div></div>
+                    <div class="compare-bar"><div class="compare-track"><div class="compare-fill mill" style="--w: 70%"></div></div><div class="compare-pct">61%</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="slide-footer">
+              <div class="signal-footer"><span>Top occasion: post-workout</span><span>Gen Z indexes +26pts</span></div>
+            </div>
+          </div>
+
+          <!-- Slide 3: Emergent themes -->
+          <div class="slide" data-slide="2">
+            <div class="slide-body">
+              <div class="themes">
+                <div class="theme-row lead">
+                  <div class="theme-info">
+                    <div class="theme-name">Clean ingredient list</div>
+                    <div class="theme-sub">Strongest signal &middot; all segments</div>
+                  </div>
+                  <div class="theme-count">142</div>
+                </div>
+                <div class="theme-row">
+                  <div class="theme-info">
+                    <div class="theme-name">Real food texture</div>
+                    <div class="theme-sub">Mentioned by repeat buyers</div>
+                  </div>
+                  <div class="theme-count">98</div>
+                </div>
+                <div class="theme-row">
+                  <div class="theme-info">
+                    <div class="theme-name">Not chalky or gritty</div>
+                    <div class="theme-sub">Top objection to category</div>
+                  </div>
+                  <div class="theme-count">76</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 4: Customer language (word bubble) -->
+          <div class="slide" data-slide="3">
+            <div class="slide-body">
+              <div class="phrase-grid">
+                <div class="phrase">"actually tastes like food"</div>
+                <div class="phrase">"not chalky"</div>
+                <div class="phrase">"my pre-meeting fuel"</div>
+                <div class="phrase">"clean ingredients"</div>
+                <div class="phrase">"holds me over"</div>
+              </div>
+            </div>
+            <div class="slide-footer">
+              <div class="source-row">
+                <div class="avatar"></div>
+                <div class="source-text"><strong>Maya, 28</strong> &middot; used the top phrase first<br>Surfaced from open-ended responses</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 5: Value drivers (attributes) -->
+          <div class="slide" data-slide="4">
+            <div class="slide-body">
+              <div class="bars">
+                <div class="bar-item">
+                  <div class="bar-label"><span>Clean ingredients</span><span class="bar-pct">38%</span></div>
+                  <div class="bar-track"><div class="bar-fill" style="--w: 88%"></div></div>
+                </div>
+                <div class="bar-item">
+                  <div class="bar-label"><span>Taste and texture</span><span class="bar-pct">27%</span></div>
+                  <div class="bar-track"><div class="bar-fill" style="--w: 63%"></div></div>
+                </div>
+                <div class="bar-item">
+                  <div class="bar-label"><span>Protein per dollar</span><span class="bar-pct">21%</span></div>
+                  <div class="bar-track"><div class="bar-fill" style="--w: 49%"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="slide-footer">
+              <div class="h-quote">"I'll pay more if the ingredients are real. That's the whole point."</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress" id="progress">
+        <button class="progress-tick active" data-index="0" aria-label="Slide 1"></button>
+        <button class="progress-tick" data-index="1" aria-label="Slide 2"></button>
+        <button class="progress-tick" data-index="2" aria-label="Slide 3"></button>
+        <button class="progress-tick" data-index="3" aria-label="Slide 4"></button>
+        <button class="progress-tick" data-index="4" aria-label="Slide 5"></button>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec-logos">
+  <div class="logos-eyebrow">Trusted by</div>
+  <div class="logos-scroll-wrap">
+    <div class="logos-track" id="logosTrack">
+      <span class="logo-item">Hearst</span>
+      <span class="logo-item">Cardiac Solutions</span>
+      <span class="logo-item">Sauz</span>
+      <span class="logo-item">KidStrong</span>
+      <span class="logo-item">Chick-fil-A</span>
+      <span class="logo-item">Contour</span>
+      <span class="logo-item">CareCognitics</span>
+      <span class="logo-item">DrinkOver</span>
+      <span class="logo-item">Im'peccable Chicken</span>
+      <span class="logo-item">Mozi Wash</span>
+    </div>
+  </div>
+</section>
+
+<section class="sec-metrics">
+  <div class="container">
+    <div class="metrics-header">
+      <h2>Agency rigor. Without the agency constraints.</h2>
+      <p>Agencies quote quarters. Surveys skip the depth. Humanize does both, at a scale modern teams actually need.</p>
+    </div>
+    <div class="metrics-grid">
+      <div class="metric-card" data-metric="21">
+        <div class="metric-card-label">Faster than agency</div>
+        <div class="metric-card-num"><span class="metric-count">0</span><span class="metric-card-unit">&times;</span></div>
+        <div class="metric-card-caption">Six-week cycles, optimized into 48 hours.</div>
+      </div>
+      <div class="metric-card" data-metric="90">
+        <div class="metric-card-label">Less than agency</div>
+        <div class="metric-card-num"><span class="metric-count">0</span><span class="metric-card-unit">%</span></div>
+        <div class="metric-card-caption">Top-tier methodology at a fraction of the cost.</div>
+      </div>
+      <div class="metric-card" data-metric="250">
+        <div class="metric-card-label">Conversations in parallel</div>
+        <div class="metric-card-num"><span class="metric-count">0</span><span class="metric-card-unit">+</span></div>
+        <div class="metric-card-caption">A year of focus groups, in a single month.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<section class="platform">
+  <div class="pl-header">
+    <h2>The research platform rebuilt around the decision.</h2>
+    <p class="subhead">Humanize runs moderated consumer conversations at the scale and speed of a survey, with the depth and nuance of qualitative research. Deployed by insights teams replacing six-week agency cycles with next day answers.</p>
+  </div>
+
+  <div class="pl-pillars">
+
+    <!-- Scale: text-only -->
+    <div class="pl-pillar">
+      <div class="pl-pillar-text">
+        <span class="pl-pillar-num">Scale</span>
+        <h3 class="pl-pillar-title">Every launch decision, not just the boardroom ones.</h3>
+        <p class="pl-pillar-body">Traditional research economics force you to pick your battles. Humanize runs at a price point where testing every SKU, every market, every positioning is defensible.</p>
+      </div>
+    </div>
+
+    <!-- Depth: participant grid + text -->
+    <div class="pl-pillar">
+      <div class="pl-pillar-visual">
+        <div class="plv-card">
+          <div class="plv-chrome">
+            <div class="plv-chrome-left"><span class="plv-dot"></span> 6 participants &middot; live exchange</div>
+            <div>24:07</div>
+          </div>
+          <div class="plv-body">
+            <div class="plv-participants">
+              <div class="plv-participant" style="background: linear-gradient(135deg, #d4c4a8, #c4b498);">
+                <div class="plv-participant-label"><span class="plv-participant-dot"></span> P04</div>
+              </div>
+              <div class="plv-participant" style="background: linear-gradient(135deg, #c8b898, #b8a888);">
+                <div class="plv-participant-label">P07</div>
+              </div>
+              <div class="plv-participant" style="background: linear-gradient(135deg, #d8c8a8, #c8b898);">
+                <div class="plv-participant-label">P09</div>
+              </div>
+              <div class="plv-participant" style="background: linear-gradient(135deg, #c4b498, #b4a488);">
+                <div class="plv-participant-label"><span class="plv-participant-dot"></span> P11</div>
+              </div>
+              <div class="plv-participant" style="background: linear-gradient(135deg, #d0c0a0, #c0b090);">
+                <div class="plv-participant-label">P13</div>
+              </div>
+              <div class="plv-participant" style="background: linear-gradient(135deg, #ccbc9c, #bcac8c);">
+                <div class="plv-participant-label">P15</div>
+              </div>
+            </div>
+            <div class="plv-quotes">
+              <div class="plv-quote-row">
+                <span class="plv-quote-who">P07</span>
+                <span>"Same. I'd try a smaller pack first before committing."</span>
+              </div>
+              <div class="plv-quote-row">
+                <span class="plv-quote-who">P09</span>
+                <span>"For me it's the storage. I don't have room for the bulk size."</span>
+              </div>
+              <div class="plv-quote-row">
+                <span class="plv-quote-who">P13</span>
+                <span>"And honestly, the packaging looks like a warehouse product."</span>
+              </div>
+            </div>
+          </div>
+          <div class="plv-foot">6 participants &middot; live exchange &middot; 24:07</div>
+        </div>
+      </div>
+      <div class="pl-pillar-text">
+        <span class="pl-pillar-num">Depth</span>
+        <h3 class="pl-pillar-title">What people actually mean, not what they type.</h3>
+        <p class="pl-pillar-body">Group conversation surfaces the second-order answer, the one that only emerges when a participant hears someone else say the opposite. Surveys can't get there.</p>
+      </div>
+    </div>
+
+    <!-- Speed: decision view + text -->
+    <div class="pl-pillar">
+      <div class="pl-pillar-visual">
+        <div class="plv-card">
+          <div class="plv-chrome">
+            <div class="plv-chrome-left"><span class="plv-dot"></span> Decision view &middot; all signals</div>
+            <div>847 responses</div>
+          </div>
+          <div class="plv-body">
+            <div class="plv-headline-label">Why people churned</div>
+            <div class="plv-headline">Onboarding confusion is driving 67% of cancellations. Pricing is a distant second.</div>
+            <div class="plv-reasons-label">Top reasons (847 responses)</div>
+            <div class="plv-reason primary">
+              <span class="plv-reason-label">Onboarding</span>
+              <div class="plv-reason-bar"><div class="plv-reason-fill" style="width:67%"></div></div>
+              <span class="plv-reason-pct">67%</span>
+            </div>
+            <div class="plv-reason">
+              <span class="plv-reason-label">Pricing</span>
+              <div class="plv-reason-bar"><div class="plv-reason-fill" style="width:43%"></div></div>
+              <span class="plv-reason-pct">43%</span>
+            </div>
+            <div class="plv-reason">
+              <span class="plv-reason-label">Trust</span>
+              <div class="plv-reason-bar"><div class="plv-reason-fill" style="width:38%"></div></div>
+              <span class="plv-reason-pct">38%</span>
+            </div>
+            <div class="plv-reason">
+              <span class="plv-reason-label">Convenience</span>
+              <div class="plv-reason-bar"><div class="plv-reason-fill" style="width:29%"></div></div>
+              <span class="plv-reason-pct">29%</span>
+            </div>
+          </div>
+          <div class="plv-foot">5 themes &middot; 847 responses &middot; 94% completion</div>
+        </div>
+      </div>
+      <div class="pl-pillar-text">
+        <span class="pl-pillar-num">Speed</span>
+        <h3 class="pl-pillar-title">Still true when you read it.</h3>
+        <p class="pl-pillar-body">Six-week studies answer last quarter's question. By the time the deck lands, the campaign shipped and the category moved. Humanize runs at the speed of the market itself, so the answer is the answer that's true right now.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<section class="how">
+  <div class="how-inner">
+    <div class="how-header">
+      <h2>Ask today. Hear back tomorrow.</h2>
+    </div>
+
+    <div class="steps">
+
+      <div class="step-item">
+      <div class="step-card">
+        <div class="visual">
+          <div class="hw-prompt-card">
+            <div class="hw-prompt-text" id="hwPromptText">Run a website conversion audit on your URL. Show the landing page to target users and find out what stops them from signing up.</div>
+            <div class="hw-prompt-footer">
+              <button class="hw-prompt-attach">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                Add files
+              </button>
+              <button class="hw-prompt-send">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="step-text">
+        <div class="step-num">1.</div>
+        <div class="step-title">Brief us on the decision</div>
+        <div class="step-desc">Tell us what you're deciding and what you need to know. We turn it into a research plan your team reviews before recruitment begins.</div>
+      </div>
+      </div>
+
+      <div class="step-item">
+      <div class="step-card">
+        <div class="visual">
+          <div class="hw-v-recruit">
+            <div class="hw-v-section">
+              <div class="hw-v-label">Define audience</div>
+              <div class="hw-v-chips">
+                <div class="hw-v-chip hw-v-chip--active">Gen Z</div>
+                <div class="hw-v-chip">DTC shoppers</div>
+                <div class="hw-v-chip">Verified buyers</div>
+                <div class="hw-v-chip">Heavy users</div>
+              </div>
+            </div>
+            <div class="hw-v-section">
+              <div class="hw-v-label">Audience scale</div>
+              <div class="hw-v-scale-row">
+                <div>
+                  <div class="hw-v-scale-num">200</div>
+                  <div class="hw-v-scale-caption">50 groups</div>
+                </div>
+                <div class="hw-v-avatars">
+                  <span style="background:linear-gradient(135deg,#C47A4A,#8A5C3A)"></span>
+                  <span style="background:linear-gradient(135deg,#6B5A8A,#3A2A5C)"></span>
+                  <span style="background:linear-gradient(135deg,#4A7A8A,#1F4A5C)"></span>
+                  <span style="background:linear-gradient(135deg,#5A8A6B,#2A5C3A)"></span>
+                </div>
+              </div>
+            </div>
+            <div class="hw-v-section">
+              <button class="hw-v-recruit-btn" tabindex="-1">Recruit Participants</button>
+            </div>
+          </div>
+          <!-- old widget removed -->
+        </div>
+      </div>
+      <div class="step-text">
+        <div class="step-num">2.</div>
+        <div class="step-title">We recruit the exact audience</div>
+        <div class="step-desc">Five million vetted panelists plus custom recruitment for the segments traditional research can't reach: heavy-users, B2B buyers, clinical populations, competitor customers.</div>
+      </div>
+      </div>
+
+      <div class="step-item">
+      <div class="step-card">
+        <div class="visual">
+          <div class="hw-v-mod">
+            <div class="hw-v-video">
+              <video autoplay loop muted playsinline poster="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80">
+                <source src="woman-having-video-conversation-home-2025-12-17-06-18-57-utc.mov" type="video/mp4">
+              </video>
+              <div class="hw-v-video-label"><span class="hw-v-live-dot"></span> Live &middot; Session 12</div>
+            </div>
+            <div class="hw-v-bar">
+              <div class="hw-v-bar-dots"><span></span><span></span><span></span></div>
+              <div class="hw-v-bar-text">Cross-referencing consensus patterns...</div>
+            </div>
+            <div class="hw-v-insight">
+              <div class="hw-v-insight-label">Group consensus</div>
+              <div class="hw-v-insight-text">Strong alignment emerging on sustainability values.</div>
+              <div class="hw-v-insight-track"><div class="hw-v-insight-fill"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="step-text">
+        <div class="step-num">3.</div>
+        <div class="step-title">AI runs the rooms in parallel</div>
+        <div class="step-desc">Hundreds of conversations at once, each one probing contradictions and following threads a survey would miss. Every exchange transcribed, timestamped, traceable.</div>
+      </div>
+      </div>
+
+      <div class="step-item">
+      <div class="step-card">
+        <div class="visual">
+          <div class="hw-v-report">
+            <div class="hw-v-report-card">
+              <div class="hw-v-report-header">Signal Report &middot; Week 14</div>
+              <div class="hw-v-finding">
+                <div class="hw-v-finding-label">Stands out</div>
+                <div class="hw-v-finding-bar"><div class="hw-v-finding-fill" style="width:78%"></div></div>
+                <div class="hw-v-finding-pct">78%</div>
+              </div>
+              <div class="hw-v-finding">
+                <div class="hw-v-finding-label">Feels premium</div>
+                <div class="hw-v-finding-bar"><div class="hw-v-finding-fill" style="width:66%"></div></div>
+                <div class="hw-v-finding-pct">66%</div>
+              </div>
+              <div class="hw-v-finding">
+                <div class="hw-v-finding-label">Clear message</div>
+                <div class="hw-v-finding-bar"><div class="hw-v-finding-fill" style="width:61%"></div></div>
+                <div class="hw-v-finding-pct">61%</div>
+              </div>
+              <div class="hw-v-finding">
+                <div class="hw-v-finding-label">Would recommend</div>
+                <div class="hw-v-finding-bar"><div class="hw-v-finding-fill" style="width:54%"></div></div>
+                <div class="hw-v-finding-pct">54%</div>
+              </div>
+            </div>
+            <div class="hw-v-quote">
+              <div class="hw-v-quote-text">"I'd just abandon the cart if there's no money-back guarantee."</div>
+              <div class="hw-v-quote-attr">&mdash; Participant, Session 12</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="step-text">
+        <div class="step-num">4.</div>
+        <div class="step-title">Signal Report in 48 hours</div>
+        <div class="step-desc">A written decision with the evidence, the dissent, and the unedited moments where the room actually changed. Ready for every stakeholder.</div>
+      </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<section class="sec-cases">
+    <div class="cases-header">
+      <div class="cases-header-left">
+        <h2>The decisions teams bring us.</h2>
+        <p class="subhead">The decisions traditional research is too slow or too expensive to answer. Global launches, category switching, shelf impact, regulated panels.</p>
+      </div>
+      <div class="cases-arrows">
+        <button class="cases-arrow" id="casesLeft" disabled><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button class="cases-arrow" id="casesRight"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  <div class="cases-track-wrap" id="casesTrack">
+    <div class="cases-track">
+      <div class="cc">
+        <div class="cc-photo">
+          <img src="https://images.unsplash.com/photo-1521123845560-14093637aa7d?w=600&q=80" alt="">
+          <div class="cc-mockup pos-tl">
+            <div class="cc-mockup-label">12 markets &middot; 1 week</div>
+            <div class="cc-mockup-q">Does this positioning translate?</div>
+            <div class="cc-mockup-meta">Same study, twelve languages</div>
+          </div>
+        </div>
+        <div class="cc-footer"><div class="cc-cat">Global launch validation</div><div class="cc-desc">Does this positioning translate across markets? Run the same study in twelve languages in the same week.</div></div>
+      </div>
+      <div class="cc">
+        <div class="cc-photo">
+          <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&q=80" alt="">
+          <div class="cc-mockup pos-tl">
+            <div class="cc-mockup-label">Participant 07</div>
+            <div class="cc-mockup-q">Why did your heaviest buyers leave?</div>
+            <div class="cc-mockup-quote">"It wasn't the price. I just stopped thinking about you."</div>
+          </div>
+        </div>
+        <div class="cc-footer"><div class="cc-cat">Category switching</div><div class="cc-desc">Why did your heaviest buyers leave? Hear it in their words before the next earnings call.</div></div>
+      </div>
+      <div class="cc">
+        <div class="cc-photo">
+          <img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=600&q=80" alt="">
+          <div class="cc-mockup pos-tl">
+            <div class="cc-mockup-label">Participant 11</div>
+            <div class="cc-mockup-q">Does the new design land?</div>
+            <div class="cc-mockup-check"><span class="ck">&#10003;</span> Premium</div>
+            <div class="cc-mockup-check"><span class="cx">&#10005;</span> Healthy</div>
+            <div class="cc-mockup-check"><span class="ck">&#10003;</span> Trustworthy</div>
+          </div>
+        </div>
+        <div class="cc-footer"><div class="cc-cat">Packaging &amp; shelf impact</div><div class="cc-desc">Does the new design communicate what your team thinks it does? Not in a lab. At the shelf, in the store, in their hands.</div></div>
+      </div>
+      <div class="cc">
+        <div class="cc-photo">
+          <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=600&q=80" alt="">
+          <div class="cc-mockup pos-tl">
+            <div class="cc-mockup-label">Regulated panel</div>
+            <div class="cc-mockup-q">Why do patients stop adhering?</div>
+            <div class="cc-mockup-quote">"I forget after the first week. Nothing brings me back."</div>
+          </div>
+        </div>
+        <div class="cc-footer"><div class="cc-cat">Clinical &amp; regulated audiences</div><div class="cc-desc">Patient adherence, physician preference, caregiver experience. Vetted panels in segments other tools can't reach.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<section class="sec-signal">
+  <div class="container">
+    <div class="signal-header">
+        <h2>The Signal Report, written for every stakeholder.</h2>
+        <p class="subhead">The Signal Report is the decision, the evidence, and the exact customer moments behind it. Written to be forwarded from the insights team to the CMO to the board without a single slide getting rebuilt.</p>
+    </div>
+    <div class="signal-bento">
+      <div class="sig-card large" data-sig="drivers">
+        <div class="sig-card-title">Decision drivers</div>
+        <div class="sig-card-desc">What moved people, what didn't, mapped to the question you actually asked. So you know exactly what to do next.</div>
+        <div class="sig-card-widget">
+          <div class="sig-drivers-label">What moved people</div>
+          <div class="sig-driver-row"><span class="sig-driver-name">Onboarding clarity</span><div class="sig-driver-bar-area"><div class="sig-driver-axis"></div><div class="sig-driver-fill positive sage" data-w="47"></div></div><span class="sig-driver-val">+47</span></div>
+          <div class="sig-driver-row"><span class="sig-driver-name">Ease of switching</span><div class="sig-driver-bar-area"><div class="sig-driver-axis"></div><div class="sig-driver-fill positive" data-w="29"></div></div><span class="sig-driver-val">+29</span></div>
+          <div class="sig-driver-row"><span class="sig-driver-name">Brand trust</span><div class="sig-driver-bar-area"><div class="sig-driver-axis"></div><div class="sig-driver-fill negative" data-w="8"></div></div><span class="sig-driver-val">-8</span></div>
+          <div class="sig-driver-row"><span class="sig-driver-name">Feature gaps</span><div class="sig-driver-bar-area"><div class="sig-driver-axis"></div><div class="sig-driver-fill negative" data-w="19"></div></div><span class="sig-driver-val">-19</span></div>
+          <div class="sig-drivers-insight">Onboarding was the strongest signal. Mentioned unprompted in 24 of 30 sessions before any other topic surfaced.</div>
+        </div>
+      </div>
+      <div class="sig-card large">
+        <div class="sig-card-title">Participant clips</div>
+        <div class="sig-card-desc">Timestamped video moments from every session. The exact second a customer said the thing that changed the room. Share without editing.</div>
+        <div class="sig-card-widget">
+          <div class="sig-clips">
+            <div class="sig-clip-tile"><img src="https://i.pravatar.cc/400?img=20" alt=""><div class="sig-clip-play"></div><div class="sig-clip-ts">0:47</div></div>
+            <div class="sig-clip-tile"><img src="https://i.pravatar.cc/400?img=21" alt=""><div class="sig-clip-play"></div><div class="sig-clip-ts">1:23</div></div>
+            <div class="sig-clip-tile center"><img src="https://i.pravatar.cc/400?img=22" alt=""><div class="sig-clip-play"></div><div class="sig-clip-ts">2:08</div></div>
+            <div class="sig-clip-tile"><img src="https://i.pravatar.cc/400?img=23" alt=""><div class="sig-clip-play"></div><div class="sig-clip-ts">0:31</div></div>
+            <div class="sig-clip-tile"><img src="https://i.pravatar.cc/400?img=24" alt=""><div class="sig-clip-play"></div><div class="sig-clip-ts">1:55</div></div>
+          </div>
+          <div class="sig-clip-caption">"I told three friends about it the week I started using it."</div>
+        </div>
+      </div>
+    </div>
+    <div class="sig-bottom-row" style="margin-top:var(--ds-card-gap)">
+      <div class="sig-card">
+        <div class="sig-card-title">Board-ready deck</div>
+        <div class="sig-card-desc">Themes, quotes, and resonance scores in a deck your team can present without reformatting.</div>
+        <div class="sig-card-widget">
+          <div class="sig-deck-stack">
+            <div class="sig-slide back2"></div>
+            <div class="sig-slide back1"></div>
+            <div class="sig-slide front">
+              <div class="sig-slide-header">Theme 01</div>
+              <div class="sig-slide-title">Onboarding clarity drove 47% of switching intent</div>
+              <div class="sig-slide-bars"><div class="sig-slide-bar" style="width:80%"></div><div class="sig-slide-bar" style="width:55%"></div><div class="sig-slide-bar" style="width:40%"></div></div>
+              <div class="sig-slide-attr">Humanize Signal Report</div>
+            </div>
+          </div>
+          <div class="sig-deck-label">12 slides &middot; Ready</div>
+        </div>
+      </div>
+      <div class="sig-card">
+        <div class="sig-card-title">Explore chat</div>
+        <div class="sig-card-desc">Ask follow-up questions against the full transcript. Dig into a segment, theme, or moment without going back to the data.</div>
+        <div class="sig-card-widget">
+          <div class="sig-chat">
+            <div style="display:flex;flex-direction:column;align-items:flex-end"><div class="sig-chat-msg user">Why did onboarding come up so often?</div></div>
+            <div style="display:flex;flex-direction:column;align-items:flex-start"><div class="sig-chat-msg ai">Across 18 of 30 sessions, participants mentioned <span class="sig-phrase-pill">onboarding friction</span> before being prompted...</div></div>
+          </div>
+          <div class="sig-chat-input"><span class="sig-chat-input-text">Ask anything about the transcript...</span><div class="sig-chat-send">&rarr;</div></div>
+        </div>
+      </div>
+      <div class="sig-card">
+        <div class="sig-card-title">Personas</div>
+        <div class="sig-card-desc">The distinct customer profiles your data revealed. Not made-up archetypes. The real groups speaking in your sessions.</div>
+        <div class="sig-card-widget">
+          <div class="sig-personas">
+            <div class="sig-persona"><div class="sig-persona-avatar"><img src="https://i.pravatar.cc/400?img=30" alt=""></div><div class="sig-persona-name">Cautious sampler</div></div>
+            <div class="sig-persona"><div class="sig-persona-avatar"><img src="https://i.pravatar.cc/400?img=31" alt=""></div><div class="sig-persona-name">Brand loyalist</div></div>
+            <div class="sig-persona"><div class="sig-persona-avatar"><img src="https://i.pravatar.cc/400?img=32" alt=""></div><div class="sig-persona-name">Price switcher</div></div>
+          </div>
+          <div class="sig-personas-label">3 distinct groups &middot; 847 responses</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<section class="sec-tech">
+  <div class="container">
+    <div class="tech-header">
+        <h2>The technology behind modern qualitative research.</h2>
+        <p class="subhead">We rebuilt recruitment, moderation, and synthesis from the ground up. Same rigor as traditional qualitative, built for the cadence of modern product and brand teams.</p>
+    </div>
+    <div class="tech-tab-bar">
+      <button class="tech-tab active" data-tech="0">Audience Precision</button>
+      <button class="tech-tab" data-tech="1">Conversational Intelligence</button>
+      <button class="tech-tab" data-tech="2">Decision Synthesis</button>
+    </div>
+    <div class="tech-card-outer">
+    <div class="tech-stack">
+      <div class="tech-box tb1 active">
+        <div class="tech-box-left">
+          <div class="tech-box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div class="tech-box-title">Audience Precision</div>
+          <div class="tech-box-pos">The right people in the room is the whole game.</div>
+          <div class="tech-box-desc">A five-million-person vetted panel, a custom recruitment engine for hard-to-reach segments, and AI screening that qualifies participants against your exact ICP in minutes. Built to match the panel standards your insights team already uses, at a fraction of the cost.</div>
+        </div>
+        <div class="tech-box-right">
+          <div class="tech-cap-row"><div class="tech-cap-num">01</div><div class="tech-cap-content"><div class="tech-cap-name">AI-Accelerated Screening</div><div class="tech-cap-desc">Screening that qualifies participants against your exact ICP in minutes.</div></div></div>
+          <div class="tech-cap-row"><div class="tech-cap-num">02</div><div class="tech-cap-content"><div class="tech-cap-name">Multi-Layer Verification</div><div class="tech-cap-desc">Multi-signal authentication eliminates panel fillers.</div></div></div>
+          <div class="tech-cap-row"><div class="tech-cap-num">03</div><div class="tech-cap-content"><div class="tech-cap-name">Niche Audience Access</div><div class="tech-cap-desc">Custom panels for healthcare, B2B, and niche segments.</div></div></div>
+          <div class="tech-cap-row"><div class="tech-cap-num">04</div><div class="tech-cap-content"><div class="tech-cap-name">Live Replacement</div><div class="tech-cap-desc">No-shows backfilled in real time. Every session runs full.</div></div></div>
+        </div>
+      </div>
+      <div class="tech-scroll-spacer"></div>
+      <div class="tech-box tb2">
+        <div class="tech-box-left">
+          <div class="tech-box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <div class="tech-box-title">Conversational Intelligence</div>
+          <div class="tech-box-pos">The skill of a senior moderator, in every session.</div>
+          <div class="tech-box-desc">AI moderators trained on decades of qualitative methodology, running hundreds of sessions in parallel. Researcher-supervised, not autonomous.</div>
+        </div>
+        <div class="tech-box-right">
+          <div class="tech-cap-row"><div class="tech-cap-num">01</div><div class="tech-cap-content"><div class="tech-cap-name">Adaptive Probing Engine</div><div class="tech-cap-desc">Follows up on vague answers, traces every contradiction.</div></div></div>
+          <div class="tech-cap-row"><div class="tech-cap-num">02</div><div class="tech-cap-content"><div class="tech-cap-name">Cross-Session Pattern Detection</div><div class="tech-cap-desc">Spots signals across thirty sessions no human team could.</div></div></div>
+          <div class="tech-cap-row"><div class="tech-cap-num">03</div><div class="tech-cap-content"><div class="tech-cap-name">Bias Control Framework</div><div class="tech-cap-desc">Safeguards against leading questions and people telling you what you want to hear.</div></div></div>
+          <div class="tech-cap-row"><div class="tech-cap-num">04</div><div class="tech-cap-content"><div class="tech-cap-name">Researcher Oversight</div><div class="tech-cap-desc">Senior research lead supervises every study for rigor.</div></div></div>
+        </div>
+      </div>
+      <div class="tech-scroll-spacer"></div>
+      <div class="tech-box tb3">
+        <div class="tech-box-left">
+          <div class="tech-box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+          <div class="tech-box-title">Decision Synthesis</div>
+          <div class="tech-box-pos">Raw conversation in. Decision out.</div>
+          <div class="tech-box-desc">A synthesis layer that turns qualitative data into a decision-ready brief, anchored to your original question.</div>
+        </div>
+        <div class="tech-box-right">
+          <div class="tech-cap-row"><div class="tech-cap-num">01</div><div class="tech-cap-content"><div class="tech-cap-name">Brief-Anchored Analysis</div><div class="tech-cap-desc">Every insight maps back to the question on your brief.</div></div></div>
+          <div class="tech-cap-row"><div class="tech-cap-num">02</div><div class="tech-cap-content"><div class="tech-cap-name">Confidence Scoring</div><div class="tech-cap-desc">Signal strength and consistency as a single confidence score.</div></div></div>
+          <div class="tech-cap-row"><div class="tech-cap-num">03</div><div class="tech-cap-content"><div class="tech-cap-name">Verbatim Evidence Linking</div><div class="tech-cap-desc">Every claim traced to the exact session moment.</div></div></div>
+          <div class="tech-cap-row"><div class="tech-cap-num">04</div><div class="tech-cap-content"><div class="tech-cap-name">Pattern Recognition at Scale</div><div class="tech-cap-desc">ML models identify themes and drivers across the full study.</div></div></div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<section class="sec-final-cta" id="ctaWallSection">
+  <div class="cta-wall-wrap">
+    <div class="cta-wall" id="ctaWall">
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=1" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=2" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=3" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=4" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=5" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=6" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=7" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=8" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=9" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=10" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=11" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=12" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=13" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=14" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=15" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=16" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=17" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=18" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=19" alt=""></div>
+      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=25" alt=""></div>
+    </div>
+  </div>
+  <div class="cta-text">
+    <div class="cta-text-headline">Don't guess. Ask your customers.</div>
+    <div class="cta-text-body">Humanize is deployed by enterprise insights, brand, and innovation teams who need real consumer evidence on the cadence of real decisions. Talk to our team to get set up right away.</div>
+    <div class="cta-text-row">
+      <a href="#" class="btn btn-primary">Contact sales <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-wordmark">Humanize</div>
+        <div class="footer-brand-tagline">Ask your customers before you make the call.</div>
+      </div>
+      <div class="footer-columns">
+        <div class="footer-col">
+          <div class="footer-col-title">Platform</div>
+          <a href="#">How it works</a>
+          <a href="#">Signal Report</a>
+          <a href="#">Recruitment</a>
+          <a href="#">Pricing</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Solutions</div>
+          <a href="#">CPG &amp; Retail</a>
+          <a href="#">Healthcare</a>
+          <a href="#">Enterprise</a>
+          <a href="#">Use cases</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Company</div>
+          <a href="#">About</a>
+          <a href="#">Clients</a>
+          <a href="#">Research</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Humanize</span>
+      <div class="footer-legal">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('navToggle').addEventListener('click', function() {
+    document.getElementById('navMobile').classList.toggle('is-open');
+  });
+
+</script>
+
+<script>
+  const questions = [
+    "Which packaging design drives intent to purchase?",
+    "Signal report: Gen Z vs Millennials",
+    "What themes are emerging across conversations?",
+    "How are customers describing this in their own words?",
+    "Which attributes matter most to buyers?"
+  ];
+
+  const slides = document.querySelectorAll('.slide');
+  const ticks = document.querySelectorAll('.progress-tick');
+  const questionEl = document.getElementById('question');
+  const pipPersons = document.querySelectorAll('.pip-person');
+  const participants = document.querySelectorAll('.participant');
+  let current = 0;
+  const total = slides.length;
+  const duration = 5000;
+  let timer;
+
+  function goTo(next) {
+    if (next === current) return;
+
+    questionEl.style.opacity = '0';
+    setTimeout(() => {
+      questionEl.textContent = questions[next];
+      questionEl.style.opacity = '1';
+    }, 300);
+
+    slides[current].classList.remove('active');
+    void slides[next].offsetWidth;
+    slides[next].classList.add('active');
+
+    pipPersons[current].classList.remove('active');
+    pipPersons[next].classList.add('active');
+
+    participants[current].classList.remove('active');
+    participants[next].classList.add('active');
+
+    // Reset all ticks
+    ticks.forEach((t, i) => {
+      t.classList.remove('active', 'complete');
+      if (i < next) t.classList.add('complete');
+    });
+    // Force reflow so the fill animation restarts
+    void ticks[next].offsetWidth;
+    ticks[next].classList.add('active');
+
+    current = next;
+  }
+
+  function advance() {
+    goTo((current + 1) % total);
+  }
+
+  function startTimer() {
+    clearInterval(timer);
+    timer = setInterval(advance, duration);
+  }
+
+  ticks.forEach((tick, i) => {
+    tick.addEventListener('click', () => {
+      goTo(i);
+      startTimer();
+    });
+  });
+
+  startTimer();
+</script>
+
+<!-- tab-switching JS removed (pillars are static) -->
+
+<script>
+(function () {
+  'use strict';
+  var stepItems = document.querySelectorAll('.step-item');
+  var stepObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) entry.target.classList.add('in-view');
+    });
+  }, { threshold: 0.3 });
+  stepItems.forEach(function (c) { stepObserver.observe(c); });
+
+  /* ── Card 1: Cycling Prompt ── */
+  var promptEl = document.getElementById('hwPromptText');
+  if (promptEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var prompts = [
+      'Run a website conversion audit on your URL. Show the landing page to target users and find out what stops them from signing up.',
+      'Test a new product concept for your product or idea. Show the concept to real consumers and get feedback on appeal, willingness to buy, and what needs to change.',
+      'Understand why buyers are switching to your competitor. Talk to lapsed customers and surface the real reason they left.',
+      'Validate your pricing strategy for your new tier. Find out what price breaks the deal and what makes it feel worth it.',
+      'Pressure-test your positioning for your next launch. See which message resonates with the audience you\u2019re trying to win.'
+    ];
+    var pIdx = 0;
+    function cyclePrompt() {
+      promptEl.classList.add('fade-out');
+      setTimeout(function() {
+        pIdx = (pIdx + 1) % prompts.length;
+        promptEl.textContent = prompts[pIdx];
+        promptEl.classList.remove('fade-out');
+      }, 400);
+    }
+    setInterval(cyclePrompt, 4000);
+  }
+})();
+</script>
+
+<script>
+(function() {
+  var driversCard = document.querySelector('[data-sig="drivers"]');
+  if (!driversCard) return;
+  var fills = driversCard.querySelectorAll('.sig-driver-fill');
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        fills.forEach(function(f, i) {
+          setTimeout(function() {
+            var w = parseInt(f.getAttribute('data-w'));
+            f.style.width = (w / 50 * 50) + '%';
+          }, i * 100);
+        });
+      } else {
+        fills.forEach(function(f) { f.style.width = '0'; });
+      }
+    });
+  }, { threshold: 0.3 });
+  obs.observe(driversCard);
+})();
+</script>
+
+<script>
+(function() {
+  var wrap = document.getElementById('casesTrack');
+  var leftBtn = document.getElementById('casesLeft');
+  var rightBtn = document.getElementById('casesRight');
+  if (!wrap || !leftBtn || !rightBtn) return;
+  function updateBtns() {
+    leftBtn.disabled = wrap.scrollLeft <= 10;
+    rightBtn.disabled = wrap.scrollLeft >= wrap.scrollWidth - wrap.clientWidth - 10;
+  }
+  leftBtn.addEventListener('click', function() {
+    wrap.scrollBy({ left: -336, behavior: 'smooth' });
+  });
+  rightBtn.addEventListener('click', function() {
+    wrap.scrollBy({ left: 336, behavior: 'smooth' });
+  });
+  wrap.addEventListener('scroll', updateBtns);
+  updateBtns();
+})();
+</script>
+<script>
+(function() {
+  var wall = document.getElementById('ctaWall');
+  if (!wall) return;
+  var items = Array.from(wall.children);
+  items.forEach(function(item) {
+    wall.appendChild(item.cloneNode(true));
+  });
+})();
+</script>
+<script>
+(function() {
+  var track = document.getElementById('logosTrack');
+  if (!track) return;
+  var items = Array.from(track.children);
+  items.forEach(function(item) {
+    track.appendChild(item.cloneNode(true));
+  });
+})();
+</script>
+
+<script>
+(function() {
+  var techTabs = document.querySelectorAll('.tech-tab');
+  var techBoxes = document.querySelectorAll('.tech-box');
+  if (!techTabs.length || !techBoxes.length) return;
+  techTabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      var idx = parseInt(tab.getAttribute('data-tech'));
+      techTabs.forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      techBoxes.forEach(function(box, i) {
+        if (i === idx) {
+          box.classList.add('active');
+        } else {
+          box.classList.remove('active');
+        }
+      });
+    });
+  });
+})();
+</script>
+<script>
+(function() {
+  var sigCards = document.querySelectorAll('.sig-card');
+  if (!sigCards.length) return;
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) e.target.classList.add('in-view');
+    });
+  }, { threshold: 0.15 });
+  sigCards.forEach(function(c, i) {
+    c.style.transitionDelay = (i * 0.1) + 's';
+    obs.observe(c);
+  });
+})();
+</script>
+<script>
+(function() {
+  var metricCards = document.querySelectorAll('.metric-card');
+  if (!metricCards.length) return;
+  var animated = {};
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting && !animated[e.target.dataset.metric]) {
+        animated[e.target.dataset.metric] = true;
+        e.target.classList.add('in-view');
+        var target = parseInt(e.target.dataset.metric);
+        var counter = e.target.querySelector('.metric-count');
+        var n = 0;
+        var totalDuration = 1200;
+        var frames = 40;
+        var intervalMs = totalDuration / frames;
+        var step = Math.max(1, Math.round(target / frames));
+        var interval = setInterval(function() {
+          n += step;
+          if (n >= target) { n = target; clearInterval(interval); }
+          counter.textContent = n;
+        }, intervalMs);
+      }
+    });
+  }, { threshold: 0.3 });
+  metricCards.forEach(function(c, i) {
+    c.style.transitionDelay = (i * 0.2) + 's';
+    obs.observe(c);
+  });
+})();
+</script>
+</body>
+</html>
