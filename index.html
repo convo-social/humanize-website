@@ -1970,7 +1970,6 @@
 
     .visual {
       position: relative;
-      overflow: hidden;
       padding: 12px;
       display: flex;
       align-items: center;
@@ -4289,8 +4288,8 @@
     <div class="steps">
 
       <div class="step-item">
-      <div class="step-card">
-        <div class="visual">
+      <div class="step-card step-card-overflow-mobile">
+        <div class="visual visual-overflow-mobile">
           <div class="hw-prompt-card">
             <div class="hw-prompt-text" id="hwPromptText" contenteditable="true" spellcheck="false">Why are buyers switching to our competitor?</div>
             <div class="hw-prompt-footer">
@@ -5469,15 +5468,15 @@
 
   @media (max-width: 767px) {
     .chart-card {
-      left: calc(-7.75rem - 18px);
+      left: calc(-9rem - 24px);
     }
 
     .quote-card {
-      right: -4.25rem;
+      right: -5.5rem;
     }
 
     .status-tag {
-      right: -3.25rem;
+      right: -4.5rem;
     }
   }
   
