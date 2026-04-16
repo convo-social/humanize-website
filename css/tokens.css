@@ -85,7 +85,5 @@
   }
 }
 
-/* Webflow template pages (pricing, case-studies, manifesto, legal, etc.)
-   use css/convo-new.webflow.css which bakes its own consistent scale.
-   Don't override Webflow tokens — they're internally consistent.
-   tokens.css serves the 3 custom pages: index, humanize, contact-us. */
+/* tokens.css serves the custom pages that don't use inline styles:
+   index.html, contact-us.html. Legal pages define their own scale inline. */
