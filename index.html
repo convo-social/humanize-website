@@ -1097,11 +1097,11 @@
     /* Video pip */
     .video-pip {
       position: absolute;
-      top: -16px;
-      right: -20px;
-      width: 88px;
-      height: 88px;
-      border-radius: 10px;
+      top: -74px;
+      right: -30px;
+      width: 132px;
+      height: 132px;
+      border-radius: 14px;
       overflow: hidden;
       z-index: 5;
       box-shadow:
@@ -1688,7 +1688,7 @@
     .lmv-questions {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 16px;
     }
     .lmv-q-card {
       display: flex;
@@ -3330,7 +3330,7 @@
       height: 120px;
       z-index: 2;
     }
-    .sig-clip-tile img { width: 100%; height: 100%; object-fit: cover; }
+    .sig-clip-tile img, .sig-clip-tile video { width: 100%; height: 100%; object-fit: cover; }
     .sig-clip-tile::after {
       content: '';
       position: absolute;
@@ -3340,27 +3340,10 @@
     }
     .sig-clip-tile.center::after { background: transparent; }
     .sig-clip-play {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%,-50%);
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2;
+      display: none;
     }
-    .sig-clip-play::after {
-      content: '';
-      width: 0;
-      height: 0;
-      border-left: 8px solid var(--color-dark);
-      border-top: 5px solid transparent;
-      border-bottom: 5px solid transparent;
-      margin-left: 2px;
+    .sig-clip-tile:hover::after {
+      background: transparent;
     }
     .sig-clip-ts {
       position: absolute;
@@ -3558,6 +3541,7 @@
       width: 100%;
       margin: 0 auto 3rem;
       overflow: hidden;
+      padding: 12px 0;
       -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
       mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
     }
@@ -3576,19 +3560,24 @@
       100% { transform: translateX(-50%); }
     }
     .cta-wall-tile {
-      width: 88px;
-      height: 88px;
-      border-radius: 12px;
+      width: 120px;
+      height: 120px;
+      border-radius: 14px;
       overflow: hidden;
       flex-shrink: 0;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      position: relative;
     }
-    .cta-wall-tile img {
+    .cta-wall-tile img, .cta-wall-tile video {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
-      filter: grayscale(1);
-      opacity: 0.85;
+    }
+    .cta-wall-tile.active-tile {
+      box-shadow: 0 0 0 4px #d4c9b8;
+      transform: scale(1.12);
+      z-index: 2;
     }
     .cta-text {
       max-width: 1140px;
@@ -3643,7 +3632,7 @@
       .sec-final-cta { padding: 96px 0; }
       .cta-text { padding: 0 24px; }
       .cta-text-headline { font-size: var(--text-section); }
-      .cta-wall-tile { width: 64px; height: 64px; border-radius: 14px; }
+      .cta-wall-tile { width: 80px; height: 80px; border-radius: 12px; }
       .cta-wall { gap: 8px; }
       .h-hero-text {
         max-width: 100%;
@@ -3741,20 +3730,20 @@
     <div class="showcase">
       <div class="video-pip">
         <div class="pip-stage" id="pipStage">
-          <div class="pip-person active" style="background: linear-gradient(135deg, #c47a4a 0%, #6b3a1f 100%);">
-            <span class="pip-initials">SR</span>
+          <div class="pip-person active" style="background: #000;">
+            <video autoplay loop muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="pip-businesswoman.mp4" type="video/mp4"></video>
           </div>
-          <div class="pip-person" style="background: linear-gradient(135deg, #4a6b8a 0%, #1f3a5c 100%);">
-            <span class="pip-initials">MK</span>
+          <div class="pip-person" style="background: #000;">
+            <video autoplay loop muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="pip-smile.mp4" type="video/mp4"></video>
           </div>
-          <div class="pip-person" style="background: linear-gradient(135deg, #6b5a8a 0%, #3a2a5c 100%);">
-            <span class="pip-initials">JT</span>
+          <div class="pip-person" style="background: #000;">
+            <video autoplay loop muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="pip-webcam.mp4" type="video/mp4"></video>
           </div>
-          <div class="pip-person" style="background: linear-gradient(135deg, #5a8a6b 0%, #2a5c3a 100%);">
-            <span class="pip-initials">AL</span>
+          <div class="pip-person" style="background: #000;">
+            <video autoplay loop muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="pip-footage.mp4" type="video/mp4"></video>
           </div>
-          <div class="pip-person" style="background: linear-gradient(135deg, #8a5a4a 0%, #5c2a1f 100%);">
-            <span class="pip-initials">DC</span>
+          <div class="pip-person" style="background: #000;">
+            <video autoplay loop muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="pip-woman-home.mp4" type="video/mp4"></video>
           </div>
         </div>
         <div class="pip-wave">
@@ -3995,8 +3984,8 @@
   <div class="pl-row">
     <div class="pl-visual">
 
-      <!-- PANEL 1: Scale -->
-      <div class="pl-panel active" data-panel="1">
+      <!-- PANEL 2: Scale -->
+      <div class="pl-panel" data-panel="2">
         <div class="visual-chrome">
           <div class="chrome-left"><span class="pl-live-dot"></span> Live study feed &middot; 12 active this week</div>
           <div class="chrome-right">Q2 2026</div>
@@ -4045,53 +4034,53 @@
         </div>
       </div>
 
-      <!-- PANEL 2: Conversation (Depth) -->
-      <div class="pl-panel" data-panel="2">
+      <!-- PANEL 1: Conversation (Depth) -->
+      <div class="pl-panel active" data-panel="1">
         <div class="visual-chrome">
-          <div class="chrome-left"><span class="pl-live-dot"></span> 6 participants &middot; live exchange</div>
-          <div class="chrome-right">24:07</div>
+          <div class="chrome-left"><span class="pl-live-dot"></span> 6 participants &middot; top highlights</div>
+          <div class="chrome-right">45 mins</div>
         </div>
         <div class="panel-body">
           <div class="conv-body">
             <div class="speakers">
-              <div class="speaker live"><div class="pl-avatar"></div><div class="label">P04 live</div></div>
-              <div class="speaker"><div class="pl-avatar"></div><div class="label">P07</div></div>
-              <div class="speaker"><div class="pl-avatar"></div><div class="label">P09</div></div>
-              <div class="speaker live"><div class="pl-avatar"></div><div class="label">P11 live</div></div>
-              <div class="speaker"><div class="pl-avatar"></div><div class="label">P13</div></div>
-              <div class="speaker"><div class="pl-avatar"></div><div class="label">P15</div></div>
+              <div class="speaker"><div class="pl-avatar"><video autoplay loop muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="video-marcus.mp4" type="video/mp4"></video></div><div class="label">Marcus</div></div>
+              <div class="speaker"><div class="pl-avatar"><video autoplay loop muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="video-sofia.mp4" type="video/mp4"></video></div><div class="label">Sofia</div></div>
+              <div class="speaker"><div class="pl-avatar"><video autoplay loop muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="video-james.mp4" type="video/mp4"></video></div><div class="label">James</div></div>
+              <div class="speaker"><div class="pl-avatar"><video autoplay loop muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="video-macy.mp4" type="video/mp4"></video></div><div class="label">Macy</div></div>
+              <div class="speaker"><div class="pl-avatar"><video autoplay loop muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="video-david.mp4" type="video/mp4"></video></div><div class="label">David</div></div>
+              <div class="speaker"><div class="pl-avatar"><video autoplay loop muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="video-nina.mp4" type="video/mp4"></video></div><div class="label">Nina</div></div>
             </div>
             <div class="caption-area">
               <div class="caption-track">
                 <!-- Set A -->
-                <div class="caption-line"><span class="who">P04</span><span>"I'd buy it but the size is wrong for my household."</span></div>
-                <div class="caption-line"><span class="who">P11</span><span>"Exactly, it's not a value issue. It's a commitment issue."</span></div>
-                <div class="caption-line"><span class="who">P07</span><span>"Same. I'd try a smaller pack first before committing."</span></div>
-                <div class="caption-line"><span class="who">P09</span><span>"For me it's the storage. I don't have room for the bulk size."</span></div>
-                <div class="caption-line"><span class="who">P13</span><span>"And honestly, the packaging looks like a warehouse product."</span></div>
-                <div class="caption-line"><span class="who">P15</span><span>"That's the thing, it doesn't feel like something I'd put on my counter."</span></div>
-                <div class="caption-line"><span class="who">P04</span><span>"Right, the smaller version would actually fit my life."</span></div>
-                <div class="caption-line"><span class="who">P11</span><span>"I'd pay more per ounce for the smaller one, no question."</span></div>
-                <div class="caption-line"><span class="who">P07</span><span>"Same here. It's about trying it without the commitment."</span></div>
-                <div class="caption-line"><span class="who">P09</span><span>"If they offered a starter size I'd buy today."</span></div>
+                <div class="caption-line"><span class="who">Marcus</span><span>"I'd buy it but the size is wrong for my household."</span></div>
+                <div class="caption-line"><span class="who">Macy</span><span>"Exactly, it's not a value issue. It's a commitment issue."</span></div>
+                <div class="caption-line"><span class="who">Sofia</span><span>"Same. I'd try a smaller pack first before committing."</span></div>
+                <div class="caption-line"><span class="who">James</span><span>"For me it's the storage. I don't have room for the bulk size."</span></div>
+                <div class="caption-line"><span class="who">David</span><span>"And honestly, the packaging looks like a warehouse product."</span></div>
+                <div class="caption-line"><span class="who">Nina</span><span>"That's the thing, it doesn't feel like something I'd put on my counter."</span></div>
+                <div class="caption-line"><span class="who">Marcus</span><span>"Right, the smaller version would actually fit my life."</span></div>
+                <div class="caption-line"><span class="who">Macy</span><span>"I'd pay more per ounce for the smaller one, no question."</span></div>
+                <div class="caption-line"><span class="who">Sofia</span><span>"Same here. It's about trying it without the commitment."</span></div>
+                <div class="caption-line"><span class="who">James</span><span>"If they offered a starter size I'd buy today."</span></div>
                 <!-- Set A repeats -->
-                <div class="caption-line"><span class="who">P04</span><span>"I'd buy it but the size is wrong for my household."</span></div>
-                <div class="caption-line"><span class="who">P11</span><span>"Exactly, it's not a value issue. It's a commitment issue."</span></div>
-                <div class="caption-line"><span class="who">P07</span><span>"Same. I'd try a smaller pack first before committing."</span></div>
-                <div class="caption-line"><span class="who">P09</span><span>"For me it's the storage. I don't have room for the bulk size."</span></div>
-                <div class="caption-line"><span class="who">P13</span><span>"And honestly, the packaging looks like a warehouse product."</span></div>
-                <div class="caption-line"><span class="who">P15</span><span>"That's the thing, it doesn't feel like something I'd put on my counter."</span></div>
-                <div class="caption-line"><span class="who">P04</span><span>"Right, the smaller version would actually fit my life."</span></div>
-                <div class="caption-line"><span class="who">P11</span><span>"I'd pay more per ounce for the smaller one, no question."</span></div>
-                <div class="caption-line"><span class="who">P07</span><span>"Same here. It's about trying it without the commitment."</span></div>
-                <div class="caption-line"><span class="who">P09</span><span>"If they offered a starter size I'd buy today."</span></div>
+                <div class="caption-line"><span class="who">Marcus</span><span>"I'd buy it but the size is wrong for my household."</span></div>
+                <div class="caption-line"><span class="who">Macy</span><span>"Exactly, it's not a value issue. It's a commitment issue."</span></div>
+                <div class="caption-line"><span class="who">Sofia</span><span>"Same. I'd try a smaller pack first before committing."</span></div>
+                <div class="caption-line"><span class="who">James</span><span>"For me it's the storage. I don't have room for the bulk size."</span></div>
+                <div class="caption-line"><span class="who">David</span><span>"And honestly, the packaging looks like a warehouse product."</span></div>
+                <div class="caption-line"><span class="who">Nina</span><span>"That's the thing, it doesn't feel like something I'd put on my counter."</span></div>
+                <div class="caption-line"><span class="who">Marcus</span><span>"Right, the smaller version would actually fit my life."</span></div>
+                <div class="caption-line"><span class="who">Macy</span><span>"I'd pay more per ounce for the smaller one, no question."</span></div>
+                <div class="caption-line"><span class="who">Sofia</span><span>"Same here. It's about trying it without the commitment."</span></div>
+                <div class="caption-line"><span class="who">James</span><span>"If they offered a starter size I'd buy today."</span></div>
               </div>
             </div>
           </div>
         </div>
         <div class="visual-foot">
           <div class="pl-bars"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-          6 participants &middot; live exchange &middot; 24:07
+          6/250 participants &middot; 45 mins
         </div>
       </div>
 
@@ -4178,14 +4167,14 @@
 
     <div class="pl-cards">
       <div class="pl-card active" data-card="1">
-        <span class="pl-card-num">Scale</span>
-        <h3 class="pl-card-title">For every bet, not just the big ones.</h3>
-        <p class="pl-card-body">Legacy economics force you to pick your battles. Humanize runs at a price point where testing every SKU, every market, every claim is defensible.</p>
-      </div>
-      <div class="pl-card" data-card="2">
         <span class="pl-card-num">Depth</span>
         <h3 class="pl-card-title">What people mean, not what they type.</h3>
         <p class="pl-card-body">Group conversation surfaces the second-order answer, the one that only emerges when a participant hears someone else say the opposite. Surveys cannot reach it.</p>
+      </div>
+      <div class="pl-card" data-card="2">
+        <span class="pl-card-num">Scale</span>
+        <h3 class="pl-card-title">For every bet, not just the big ones.</h3>
+        <p class="pl-card-body">Legacy economics force you to pick your battles. Humanize runs at a price point where testing every SKU, every market, every claim is defensible.</p>
       </div>
       <div class="pl-card" data-card="3">
         <span class="pl-card-num">Speed</span>
@@ -4211,7 +4200,7 @@
       <div class="step-card">
         <div class="visual">
           <div class="hw-prompt-card">
-            <div class="hw-prompt-text" id="hwPromptText">Why are buyers switching to our competitor?</div>
+            <div class="hw-prompt-text" id="hwPromptText" contenteditable="true" spellcheck="false">Why are buyers switching to our competitor?</div>
             <div class="hw-prompt-footer">
               <button class="hw-prompt-attach">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
@@ -4346,7 +4335,7 @@
 
     .ds-float-3 {
       top: 25%;
-      left: calc(-9rem - 65px);
+      left: calc(-9rem - 35px);
       width: 200px;
       z-index: 6;
     }
@@ -4472,7 +4461,7 @@
     
     .ds-delay-1 { transition-delay: 0.15s; }
     .ds-delay-2 { transition-delay: 0.30s; }
-    .ds-delay-3 { transition-delay: 0.45s; }
+    .ds-delay-3 { transition-delay: 0.2s; }
   
     @keyframes ds-pulse {
       0%   { box-shadow: 0 0 0 0 var(--accent-glow); }
@@ -4552,8 +4541,6 @@
   
     function dsReset() {
       ['ds-goal-1','ds-goal-2'].forEach(function(id) { document.getElementById(id).value = ''; });
-      document.getElementById('ds-group-select').value = '';
-      document.querySelectorAll('.ds-tag').forEach(function(t) { t.classList.remove('selected'); });
       document.getElementById('ds-recruit-btn').classList.remove('pulse');
       return Promise.resolve();
     }
@@ -4567,11 +4554,7 @@
       
       if (!alive) return;
       await wait(500);
-      document.getElementById('ds-group-select').value = '6-8';
-  
-      if (!alive) return;
-      await wait(500);
-      var ids = ['ds-tag-1', 'ds-tag-3', 'ds-tag-4'];
+      var ids = ['ds-tag-1', 'ds-tag-4', 'ds-tag-5'];
       for (var j = 0; j < ids.length; j++) {
         if (!alive) return;
         document.getElementById(ids[j]).classList.add('selected');
@@ -4645,8 +4628,8 @@
           if(alive) dsLoop();
           observer.disconnect(); 
         }
-      }, { threshold: 0.2 });
-      
+      }, { threshold: 0.05 });
+
       observer.observe(canvas);
   
       // Interaction interrupts
@@ -4703,7 +4686,7 @@
       position: relative;
       width: 90%;
       max-width: 500px;
-      aspect-ratio: 16 / 9;
+      aspect-ratio: 4 / 3;
     }
     
     /* Video Frame Background */
@@ -5198,8 +5181,8 @@
       <div class="video-prompt">Can you explain what gave you that impression?</div>
       
       <div class="video-player-mock">
-        <video autoplay loop muted playsinline poster="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80">
-          <source src="woman-having-video-conversation-home-2025-12-17-06-18-57-utc.mov" type="video/mp4">
+        <video autoplay loop muted playsinline>
+          <source src="woman-talking.mp4" type="video/mp4">
         </video>
       </div>
     </div>
@@ -5287,7 +5270,7 @@
   /* 1. Chart Card */
   .chart-card {
     top: 4.5rem; 
-    left: -6.5rem; 
+    left: calc(-6.5rem - 10px);
     width: 250px;
     padding: 1.25rem;
   }
@@ -5513,13 +5496,34 @@
         <div class="sig-card-desc">Timestamped video moments from every session. The exact second a customer said the thing that changed the room.</div>
         <div class="sig-card-widget">
           <div class="sig-clips">
-            <div class="sig-clip-tile"><img src="https://i.pravatar.cc/400?img=20" alt=""><div class="sig-clip-play"></div><div class="sig-clip-ts">0:47</div></div>
-            <div class="sig-clip-tile"><img src="https://i.pravatar.cc/400?img=21" alt=""><div class="sig-clip-play"></div><div class="sig-clip-ts">1:23</div></div>
-            <div class="sig-clip-tile center"><img src="https://i.pravatar.cc/400?img=22" alt=""><div class="sig-clip-play"></div><div class="sig-clip-ts">2:08</div></div>
-            <div class="sig-clip-tile"><img src="https://i.pravatar.cc/400?img=23" alt=""><div class="sig-clip-play"></div><div class="sig-clip-ts">0:31</div></div>
-            <div class="sig-clip-tile"><img src="https://i.pravatar.cc/400?img=24" alt=""><div class="sig-clip-play"></div><div class="sig-clip-ts">1:55</div></div>
+            <div class="sig-clip-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="clip-2.mp4" type="video/mp4"></video><div class="sig-clip-ts">1:23</div></div>
+            <div class="sig-clip-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="clip-3.mp4" type="video/mp4"></video><div class="sig-clip-ts">0:31</div></div>
+            <div class="sig-clip-tile center"><video autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="clip-5.mp4" type="video/mp4"></video><div class="sig-clip-ts">2:08</div></div>
+            <div class="sig-clip-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="clip-1.mp4" type="video/mp4"></video><div class="sig-clip-ts">0:47</div></div>
+            <div class="sig-clip-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="clip-4.mp4" type="video/mp4"></video><div class="sig-clip-ts">1:55</div></div>
           </div>
           <div class="sig-clip-caption">"I told three friends about it the week I started using it."</div>
+          <script>
+          (function() {
+            var tiles = document.querySelectorAll('.sig-clip-tile');
+            tiles.forEach(function(tile) {
+              var video = tile.querySelector('video');
+              if (!video) return;
+              tile.addEventListener('mouseenter', function() {
+                tiles.forEach(function(t) {
+                  var v = t.querySelector('video');
+                  if (v) v.pause();
+                });
+                video.play();
+              });
+              tile.addEventListener('mouseleave', function() {
+                video.pause();
+                var center = document.querySelector('.sig-clip-tile.center video');
+                if (center) center.play();
+              });
+            });
+          })();
+          </script>
         </div>
       </div>
     </div>
@@ -5702,26 +5706,28 @@
 <section class="sec-final-cta" id="ctaWallSection">
   <div class="cta-wall-wrap">
     <div class="cta-wall" id="ctaWall">
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=1" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=2" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=3" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=4" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=5" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=6" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=7" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=8" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=9" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=10" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=11" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=12" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=13" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=14" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=15" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=16" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=17" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=18" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=19" alt=""></div>
-      <div class="cta-wall-tile"><img src="https://i.pravatar.cc/150?img=25" alt=""></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-1.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-2.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-3.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-4.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-5.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-6.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-7.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-8.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-9.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-10.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-11.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-12.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-13.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-14.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-15.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-16.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-17.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-18.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-19.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-20.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-21.mp4" type="video/mp4"></video></div>
+      <div class="cta-wall-tile"><video loop muted playsinline style="width:100%;height:100%;object-fit:cover;"><source src="footer-22.mp4" type="video/mp4"></video></div>
     </div>
   </div>
   <div class="cta-text">
@@ -5881,22 +5887,33 @@
   var promptEl = document.getElementById('hwPromptText');
   if (promptEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     var prompts = [
-      'Why are buyers switching to our competitor?',
-      'Test this new product concept with real buyers.',
-      'What\u2019s stopping signups on our landing page?',
-      'Validate pricing for the premium tier.',
-      'Pressure-test our launch positioning.'
+      'Why are heavy buyers switching to the $40 competitor?',
+      'Does our Gen Z messaging land outside coastal markets?',
+      'Will this packaging redesign move units at shelf?',
+      'Test the rebrand positioning before the board deck.',
+      'Should we launch the refill program this quarter?',
+      'Is the premium tier priced right for repeat buyers?',
+      'What\u2019s driving churn in our highest-value segment?'
     ];
-    var pIdx = 0;
+    var pIdx = 0, userEditing = false, cycleTimer;
+
+    promptEl.addEventListener('focus', function() {
+      userEditing = true;
+      if (cycleTimer) clearInterval(cycleTimer);
+      promptEl.classList.remove('fade-out');
+    });
+
     function cyclePrompt() {
+      if (userEditing) return;
       promptEl.classList.add('fade-out');
       setTimeout(function() {
+        if (userEditing) return;
         pIdx = (pIdx + 1) % prompts.length;
         promptEl.textContent = prompts[pIdx];
         promptEl.classList.remove('fade-out');
       }, 400);
     }
-    setInterval(cyclePrompt, 4000);
+    cycleTimer = setInterval(cyclePrompt, 4000);
   }
 })();
 </script>
@@ -5948,9 +5965,49 @@
 (function() {
   var wall = document.getElementById('ctaWall');
   if (!wall) return;
+  var originalCount = wall.children.length;
   var items = Array.from(wall.children);
   items.forEach(function(item) {
     wall.appendChild(item.cloneNode(true));
+  });
+
+  // Hover-play logic with cycling highlight
+  var allTiles = Array.from(wall.querySelectorAll('.cta-wall-tile'));
+  var currentPlaying = null;
+  // Start from the center of the original (first) set
+  var defaultIdx = Math.floor(originalCount / 2);
+  var isHovering = false;
+
+  function activateTile(tile) {
+    allTiles.forEach(function(t) {
+      t.classList.remove('active-tile');
+      var v = t.querySelector('video');
+      if (v) v.pause();
+    });
+    tile.classList.add('active-tile');
+    var v = tile.querySelector('video');
+    if (v) { v.play(); currentPlaying = v; }
+  }
+
+  // Start center tile
+  activateTile(allTiles[defaultIdx]);
+
+  // Auto-cycle every 4s
+  setInterval(function() {
+    if (isHovering) return;
+    defaultIdx = (defaultIdx + 1) % allTiles.length;
+    activateTile(allTiles[defaultIdx]);
+  }, 4000);
+
+  allTiles.forEach(function(tile, idx) {
+    tile.addEventListener('mouseenter', function() {
+      isHovering = true;
+      activateTile(tile);
+    });
+    tile.addEventListener('mouseleave', function() {
+      isHovering = false;
+      activateTile(allTiles[defaultIdx]);
+    });
   });
 })();
 </script>
