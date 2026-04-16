@@ -1971,7 +1971,7 @@
     .visual {
       position: relative;
       overflow: hidden;
-      padding: 24px 28px;
+      padding: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -4968,6 +4968,25 @@
       transform-origin: center center;
       will-change: transform;
     }
+
+    @media (max-width: 767px) {
+      .fg-canvas.is-mobile-view {
+        padding: 1rem;
+      }
+
+      .fg-canvas.is-mobile-view .fg-wrapper {
+        width: 100%;
+      }
+
+      .fg-canvas.is-mobile-view .fg-video-frame {
+        gap: 8px;
+        padding: 12px;
+      }
+
+      .fg-canvas.is-mobile-view .fg-card {
+        display: none;
+      }
+    }
   </style>
   
   <div class="fg-canvas" id="focus-room-module">
@@ -5031,6 +5050,7 @@
         var canvas  = document.getElementById('focus-room-module');
         var wrapper = canvas && canvas.querySelector('.fg-wrapper');
         if (!canvas || !wrapper) return;
+        canvas.classList.toggle('is-mobile-view', window.innerWidth <= 767);
         wrapper.style.transform = 'none';
       }
 
@@ -5106,6 +5126,11 @@
 
       var cards = [];
 
+      function isMobileView() {
+        var canvas = document.getElementById('focus-room-module');
+        return !!(canvas && canvas.classList.contains('is-mobile-view'));
+      }
+
       function showCard(card) {
         card.style.opacity = '1';
         card.style.transform = 'translateX(-50%) translateY(0)';
@@ -5138,6 +5163,10 @@
 
       // Fade all out, update content of target, fade it in
       function switchCard(action) {
+        if (isMobileView()) {
+          cards.forEach(function(c) { if (c) hideCard(c); });
+          return;
+        }
         cards.forEach(function(c) { if (c) hideCard(c); });
         setTimeout(function() {
           var card = cards[action.cardIndex];
@@ -5156,7 +5185,9 @@
         var actionIndex = 0, cycleCount = 0, charIndex = 0, isDeleting = false, typeSpeed = 40;
 
         // Seed first card before typing begins
-        switchCard(aiActions[0]);
+        if (!isMobileView()) {
+          switchCard(aiActions[0]);
+        }
 
         function tick() {
           var action = aiActions[actionIndex];
@@ -5434,6 +5465,20 @@
     border-radius: 100px;
     z-index: 25;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  @media (max-width: 767px) {
+    .chart-card {
+      left: calc(-7.75rem - 18px);
+    }
+
+    .quote-card {
+      right: -4.25rem;
+    }
+
+    .status-tag {
+      right: -3.25rem;
+    }
   }
   
   .tag-dot {
