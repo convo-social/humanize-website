@@ -909,6 +909,7 @@
       border-radius: 6px;
       background: linear-gradient(135deg, var(--h-gray-5), var(--h-gray-4));
       margin-bottom: 6px;
+      overflow: hidden;
     }
 
     .concept.winner .concept-thumb {
@@ -3013,7 +3014,7 @@
       width: max-content;
     }
     .cc {
-      width: 320px;
+      width: 280px;
       flex-shrink: 0;
       scroll-snap-align: start;
       display: flex;
@@ -3021,7 +3022,7 @@
     }
     .cc-photo {
       position: relative;
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 1 / 1;
       overflow: hidden;
       border-radius: 12px;
       border: 1px solid var(--h-line);
@@ -3046,16 +3047,23 @@
       max-width: 200px;
       z-index: 2;
     }
-    .cc-mockup.pos-tr,
-    .cc-mockup.pos-bl,
-    .cc-mockup.pos-tl,
+    .cc-mockup.pos-tl {
+      top: 20px; left: 20px; right: auto; bottom: auto;
+    }
+    .cc-mockup.pos-tr {
+      top: 20px; right: 20px; left: auto; bottom: auto;
+    }
+    .cc-mockup.pos-bl {
+      bottom: 20px; left: 20px; top: auto; right: auto;
+    }
     .cc-mockup.pos-br {
-      top: 20px;
-      left: 20px;
-      right: auto;
-      bottom: auto;
+      bottom: 20px; right: 20px; top: auto; left: auto;
+    }
+    .cc-mockup.pos-center {
+      top: 50%; left: 50%; transform: translate(-50%, -50%); right: auto; bottom: auto;
     }
     .cc-mockup-label {
+      display: none;
       font-size: 0.75rem;
       text-transform: capitalize;
       color: var(--h-gray-1);
@@ -3615,6 +3623,14 @@
       .logo-item { padding: 0 24px; }
       .logo-item img { height: 22px; }
       .pl-row { grid-template-columns: 1fr; gap: 24px; }
+      .steps { grid-template-columns: 1fr; gap: 24px; }
+      .step-card { aspect-ratio: 16 / 9; }
+      .step-title { font-size: 18px; }
+      .step-desc { font-size: 13px; }
+      .visual {
+        transform: scale(0.85);
+        transform-origin: center center;
+      }
       .pl-visual { height: 480px; }
       .pl-cards { height: auto; }
       .pl-card { padding: 20px; }
@@ -3634,17 +3650,47 @@
       .cta-text-headline { font-size: var(--text-section); }
       .cta-wall-tile { width: 80px; height: 80px; border-radius: 12px; }
       .cta-wall { gap: 8px; }
+      .h-hero {
+        min-height: auto;
+        display: block;
+      }
       .h-hero-text {
         max-width: 100%;
+      }
+      .h-headline {
+        font-size: 32px;
+        line-height: 1.15;
+      }
+      .h-sub {
+        font-size: 14px;
+      }
+      .h-eyebrow {
+        font-size: 9px;
       }
       .showcase-wrap {
         position: relative;
         top: auto;
         right: auto;
         width: 100%;
+        margin-top: 32px;
+      }
+      .showcase {
+        transform: scale(0.9);
+        transform-origin: top center;
       }
       .h-hero-inner {
-        padding: 32px 24px 48px;
+        padding: 40px 24px 32px;
+      }
+      .h-cta-row .btn {
+        font-size: 0.8rem;
+        padding: 0.6rem 1rem;
+        height: 40px;
+      }
+      .video-pip {
+        width: 100px;
+        height: 100px;
+        top: -50px;
+        right: -10px;
       }
       .nav-links,
       .nav-actions {
@@ -3671,6 +3717,22 @@
       .sig-bottom-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .mm-grid { grid-template-columns: 1fr 1fr; }
       .tech-box { padding: 32px 36px; }
+      .h-hero {
+        min-height: auto;
+      }
+      .showcase-wrap {
+        position: relative;
+        top: auto;
+        right: auto;
+        width: 60%;
+        margin: 40px auto 0;
+      }
+      .h-hero-inner {
+        padding: 60px 36px 40px;
+      }
+      .h-hero-text {
+        max-width: 100%;
+      }
     }
   </style>
 </head>
@@ -3793,14 +3855,14 @@
               <div class="concept-grid">
                 <div class="concept winner">
                   <div class="winner-tag">Winner</div>
-                  <div class="concept-thumb"></div>
+                  <div class="concept-thumb"><img src="images/Gemini_Generated_Image_u07bd8u07bd8u07b.png" alt="Concept A" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;"></div>
                   <div class="concept-meta">
                     <span class="concept-name">Concept A</span>
                     <span class="concept-pct">71%</span>
                   </div>
                 </div>
                 <div class="concept">
-                  <div class="concept-thumb"></div>
+                  <div class="concept-thumb"><img src="images/Gemini_Generated_Image_vfq8xjvfq8xjvfq8.png" alt="Concept B" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;"></div>
                   <div class="concept-meta">
                     <span class="concept-name">Concept B</span>
                     <span class="concept-pct">29%</span>
@@ -4494,9 +4556,9 @@
       <div class="ds-card ds-float ds-float-3 ds-anim ds-delay-3">
         <div class="ds-label" style="margin-bottom:0.5rem">Target Demographics</div>
         <div class="ds-avatar-row">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&h=64&q=80" class="ds-avatar" alt="Participant">
-          <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=64&h=64&q=80" class="ds-avatar" alt="Participant">
-          <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=64&h=64&q=80" class="ds-avatar" alt="Participant">
+          <img src="images/happy-smiling-and-a-portrait-of-woman-at-work-and-2026-03-25-06-52-33-utc.jpg" class="ds-avatar" alt="Participant">
+          <img src="images/laughing-young-designer-standing-in-an-office-afte-2026-03-09-04-33-22-utc.jpg" class="ds-avatar" alt="Participant">
+          <img src="images/portrait-woman-and-smile-with-professional-with-p-2026-03-25-05-19-01-utc.jpg" class="ds-avatar" alt="Participant">
         </div>
         <div class="ds-tags" id="ds-tags-container">
           <div class="ds-tag" onclick="dsToggleTag(this)" id="ds-tag-1">Gen Z</div>
@@ -5561,9 +5623,9 @@
         <div class="sig-card-desc">Real customer profiles your data revealed, not made-up archetypes.</div>
         <div class="sig-card-widget">
           <div class="sig-personas">
-            <div class="sig-persona"><div class="sig-persona-avatar"><img src="https://i.pravatar.cc/400?img=30" alt=""></div><div class="sig-persona-name">Cautious sampler</div></div>
-            <div class="sig-persona"><div class="sig-persona-avatar"><img src="https://i.pravatar.cc/400?img=31" alt=""></div><div class="sig-persona-name">Brand loyalist</div></div>
-            <div class="sig-persona"><div class="sig-persona-avatar"><img src="https://i.pravatar.cc/400?img=32" alt=""></div><div class="sig-persona-name">Price switcher</div></div>
+            <div class="sig-persona"><div class="sig-persona-avatar"><img src="images/happy-smiling-and-a-portrait-of-woman-at-work-and-2026-03-25-06-52-33-utc.jpg" alt="Cautious sampler"></div><div class="sig-persona-name">Cautious sampler</div></div>
+            <div class="sig-persona"><div class="sig-persona-avatar"><img src="images/laughing-young-designer-standing-in-an-office-afte-2026-03-09-04-33-22-utc.jpg" alt="Brand loyalist"></div><div class="sig-persona-name">Brand loyalist</div></div>
+            <div class="sig-persona"><div class="sig-persona-avatar"><img src="images/portrait-woman-and-smile-with-professional-with-p-2026-03-25-05-19-01-utc.jpg" alt="Price switcher"></div><div class="sig-persona-name">Price switcher</div></div>
           </div>
           <div class="sig-personas-label">3 distinct groups &middot; 847 responses</div>
         </div>
@@ -5587,51 +5649,120 @@
     </div>
   <div class="cases-track-wrap" id="casesTrack">
     <div class="cases-track">
-      <div class="cc">
-        <div class="cc-photo">
-          <img src="https://images.unsplash.com/photo-1521123845560-14093637aa7d?w=600&q=80" alt="">
-          <div class="cc-mockup pos-tl">
-            <div class="cc-mockup-label">12 markets &middot; 1 week</div>
-            <div class="cc-mockup-q">Does this positioning translate?</div>
-            <div class="cc-mockup-meta">Same study, twelve languages</div>
-          </div>
-        </div>
-        <div class="cc-footer"><div class="cc-cat">Global launch validation</div><div class="cc-desc">Does this positioning translate? Run the same study in twelve languages in one week.</div></div>
-      </div>
+      <!-- 1. QUOTE — Category switching (emotional hook opens the carousel) -->
       <div class="cc">
         <div class="cc-photo">
           <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&q=80" alt="">
           <div class="cc-mockup pos-tl">
-            <div class="cc-mockup-label">Participant 07</div>
             <div class="cc-mockup-q">Why did your heaviest buyers leave?</div>
             <div class="cc-mockup-quote">"It wasn't the price. I just stopped thinking about you."</div>
           </div>
         </div>
         <div class="cc-footer"><div class="cc-cat">Category switching</div><div class="cc-desc">Why did your heaviest buyers leave? Hear it in their words before the next earnings call.</div></div>
       </div>
+      <!-- 2. CHART (horizontal bars) — Claims testing -->
+      <div class="cc">
+        <div class="cc-photo">
+          <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&q=80" alt="">
+          <div class="cc-mockup pos-center">
+            <div class="cc-mockup-q">Which claim resonates most?</div>
+            <div class="cc-mockup-meta" style="margin-top:8px; font-size:11px;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>"Clean ingredients"</span><span style="font-weight:600;">72%</span></div>
+              <div style="height:4px; background:#ebe4d9; border-radius:4px; overflow:hidden;"><div style="height:100%; width:72%; background:#c44b25; border-radius:4px;"></div></div>
+              <div style="display:flex; justify-content:space-between; margin-top:6px; margin-bottom:4px;"><span>"Science-backed"</span><span style="font-weight:600;">41%</span></div>
+              <div style="height:4px; background:#ebe4d9; border-radius:4px; overflow:hidden;"><div style="height:100%; width:41%; background:#e87b5d; border-radius:4px;"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="cc-footer"><div class="cc-cat">Claims testing</div><div class="cc-desc">Which claim drives purchase intent? Rank them with real buyers, not a survey.</div></div>
+      </div>
+      <!-- 3. CHECKLIST — Packaging & shelf impact -->
       <div class="cc">
         <div class="cc-photo">
           <img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=600&q=80" alt="">
-          <div class="cc-mockup pos-tl">
-            <div class="cc-mockup-label">Participant 11</div>
+          <div class="cc-mockup pos-br">
             <div class="cc-mockup-q">Does the new design land?</div>
             <div class="cc-mockup-check"><span class="ck">&#10003;</span> Premium</div>
             <div class="cc-mockup-check"><span class="cx">&#10005;</span> Healthy</div>
             <div class="cc-mockup-check"><span class="ck">&#10003;</span> Trustworthy</div>
           </div>
         </div>
-        <div class="cc-footer"><div class="cc-cat">Packaging &amp; shelf impact</div><div class="cc-desc">Does the new design communicate what your team thinks it does? Test at the shelf, not in a lab.</div></div>
+        <div class="cc-footer"><div class="cc-cat">Packaging &amp; shelf impact</div><div class="cc-desc">Does the new design land at shelf? Test with real shoppers, not in a lab.</div></div>
       </div>
+      <!-- 4. TREND LINE — New market entry -->
+      <div class="cc">
+        <div class="cc-photo">
+          <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?w=600&q=80" alt="">
+          <div class="cc-mockup pos-tl">
+            <div class="cc-mockup-q">What do first-time buyers notice?</div>
+            <div class="cc-mockup-meta" style="margin-top:8px;">
+              <svg width="100" height="32" viewBox="0 0 100 32"><path d="M4 28 C20 24 36 18 52 12 Q68 6 96 4" stroke="#10b981" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="96" cy="4" r="3" fill="#10b981"/></svg>
+              <div style="font-size:10px; color:#10b981; margin-top:2px;">+34% awareness lift</div>
+            </div>
+          </div>
+        </div>
+        <div class="cc-footer"><div class="cc-cat">New market entry</div><div class="cc-desc">Entering a category cold? Learn what registers before you spend the media budget.</div></div>
+      </div>
+      <!-- 5. QUOTE — Creative diagnostics -->
+      <div class="cc">
+        <div class="cc-photo">
+          <img src="https://images.unsplash.com/photo-1556742031-c6961e8560b0?w=600&q=80" alt="">
+          <div class="cc-mockup pos-bl">
+            <div class="cc-mockup-q">Why did the ad underperform?</div>
+            <div class="cc-mockup-quote">"It felt generic. Like every other brand in the aisle."</div>
+          </div>
+        </div>
+        <div class="cc-footer"><div class="cc-cat">Creative diagnostics</div><div class="cc-desc">Your campaign underperformed. Hear what the audience actually felt in the moment.</div></div>
+      </div>
+      <!-- 6. BAR CHART — Subscription & retention -->
+      <div class="cc">
+        <div class="cc-photo">
+          <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80" alt="">
+          <div class="cc-mockup pos-tr">
+            <div class="cc-mockup-q">When do subscribers drop off?</div>
+            <div class="cc-mockup-meta" style="display:flex; gap:8px; margin-top:8px; align-items:flex-end;">
+              <svg width="80" height="32" viewBox="0 0 80 32"><rect x="0" y="4" width="14" height="28" rx="2" fill="#c44b25" opacity="0.9"/><rect x="18" y="10" width="14" height="22" rx="2" fill="#c44b25" opacity="0.7"/><rect x="36" y="18" width="14" height="14" rx="2" fill="#c44b25" opacity="0.45"/><rect x="54" y="24" width="14" height="8" rx="2" fill="#c44b25" opacity="0.25"/></svg>
+            </div>
+            <div style="font-size:10px; color:#c44b25; margin-top:2px;">Month 3 cliff: -62%</div>
+          </div>
+        </div>
+        <div class="cc-footer"><div class="cc-cat">Subscription &amp; retention</div><div class="cc-desc">What makes subscribers cancel after month three? Find the friction before it hits your P&amp;L.</div></div>
+      </div>
+      <!-- 7. TEXT/META — Global launch validation -->
+      <div class="cc">
+        <div class="cc-photo">
+          <img src="https://images.unsplash.com/photo-1521123845560-14093637aa7d?w=600&q=80" alt="">
+          <div class="cc-mockup pos-center">
+            <div class="cc-mockup-q">Does this positioning translate?</div>
+            <div class="cc-mockup-meta">Same study, twelve languages, one week</div>
+          </div>
+        </div>
+        <div class="cc-footer"><div class="cc-cat">Global launch validation</div><div class="cc-desc">Does this positioning translate? Run the same study in twelve languages in one week.</div></div>
+      </div>
+      <!-- 8. STATS — Pricing & tier validation -->
+      <div class="cc">
+        <div class="cc-photo">
+          <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&q=80" alt="">
+          <div class="cc-mockup pos-br">
+            <div class="cc-mockup-q">Will this feature justify the upgrade?</div>
+            <div class="cc-mockup-meta" style="margin-top:8px;">
+              <div style="display:flex; align-items:center; gap:6px; font-size:11px;"><span style="color:#10b981; font-weight:600;">67%</span><span>would upgrade</span></div>
+              <div style="display:flex; align-items:center; gap:6px; font-size:11px; margin-top:4px;"><span style="color:#c44b25; font-weight:600;">22%</span><span>need more proof</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="cc-footer"><div class="cc-cat">Pricing &amp; tier validation</div><div class="cc-desc">Does your premium tier deliver enough value to justify the price jump? Ask before you ship.</div></div>
+      </div>
+      <!-- 9. QUOTE — Clinical & regulated -->
       <div class="cc">
         <div class="cc-photo">
           <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=600&q=80" alt="">
-          <div class="cc-mockup pos-tl">
-            <div class="cc-mockup-label">Regulated panel</div>
+          <div class="cc-mockup pos-bl">
             <div class="cc-mockup-q">Why do patients stop adhering?</div>
             <div class="cc-mockup-quote">"I forget after the first week. Nothing brings me back."</div>
           </div>
         </div>
-        <div class="cc-footer"><div class="cc-cat">Clinical &amp; regulated audiences</div><div class="cc-desc">Patient adherence, physician preference, caregiver experience. Vetted panels others can't reach.</div></div>
+        <div class="cc-footer"><div class="cc-cat">Clinical &amp; regulated audiences</div><div class="cc-desc">Patient adherence, physician preference, caregiver experience. Vetted panels.</div></div>
       </div>
     </div>
   </div>
