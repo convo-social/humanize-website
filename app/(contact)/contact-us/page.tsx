@@ -94,11 +94,9 @@ export default function ContactPage() {
             <div className={styles.trustedLogos}>
               <div className={styles.logoTrack}>
                 {LOGOS.map((logo) => (
-                  // eslint-disable-next-line @next/next/no-img-element
                   <img key={logo.alt} src={logo.src} alt={logo.alt} />
                 ))}
                 {LOGOS.map((logo) => (
-                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     key={`${logo.alt}-dup`}
                     src={logo.src}
