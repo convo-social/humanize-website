@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import styles from "./Header.module.css";
@@ -16,8 +17,15 @@ export function Header({ ctaLabel = "Book a demo" }: HeaderProps) {
   return (
     <nav className={styles.nav}>
       <Container className={styles.inner}>
-        <Link href="/" className={styles.wordmark}>
-          Humanize
+        <Link href="/" className={styles.wordmark} aria-label="Humanize home">
+          <Image
+            src="/images/humanize-logo.png"
+            alt="Humanize"
+            width={1668}
+            height={524}
+            priority
+            className={styles.logo}
+          />
         </Link>
 
         <div className={styles.actions}>

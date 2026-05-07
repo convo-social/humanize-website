@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import styles from "./Footer.module.css";
@@ -18,7 +19,13 @@ export function Footer() {
       <Container>
         <div className={styles.top}>
           <div>
-            <div className={styles.brandWordmark}>Humanize</div>
+            <Image
+              src="/images/humanize-logo.png"
+              alt="Humanize"
+              width={1668}
+              height={524}
+              className={styles.brandWordmark}
+            />
             <div className={styles.brandTagline}>
               Ask your customers before you make the call.
             </div>
