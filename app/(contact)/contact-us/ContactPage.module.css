@@ -1,7 +1,7 @@
 .split {
   display: grid;
   grid-template-columns: 50fr 50fr;
-  height: calc(100vh - 64px);
+  height: calc(100vh - 96px);
   width: 100%;
 }
 

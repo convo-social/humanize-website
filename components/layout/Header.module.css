@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
+  height: 96px;
 }
 
 .wordmark {
@@ -19,6 +19,14 @@
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--color-dark);
+  display: inline-flex;
+  align-items: center;
+}
+
+.logo {
+  height: 56px;
+  width: auto;
+  display: block;
 }
 
 .links {
@@ -85,7 +93,7 @@
 .mobile.open {
   display: block;
   position: absolute;
-  top: 64px;
+  top: 96px;
   left: 0;
   right: 0;
   background: var(--h-bg);
