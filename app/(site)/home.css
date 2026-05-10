@@ -3183,6 +3183,21 @@
       gap: 12px;
       flex-wrap: wrap;
     }
+    .cta-text-compliance {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 28px;
+      font-family: var(--font-plex-mono);
+      font-size: var(--text-small);
+      font-weight: 400;
+      color: var(--h-gray-1);
+      letter-spacing: 0.04em;
+      opacity: 0.7;
+    }
+    .cta-text-compliance svg {
+      flex-shrink: 0;
+    }
     /* CTA button uses global .btn .btn-primary */
 
     @media (max-width: 720px) {
